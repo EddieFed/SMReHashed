@@ -10,13 +10,13 @@ config_version=5
 
 [application]
 
-config/name="Test"
+config/name="Super Mario - Rehashed"
 run/main_scene="res://root.tscn"
 config/features=PackedStringArray("4.2", "C#", "Mobile")
 
 [dotnet]
 
-project/assembly_name="Test"
+project/assembly_name="Super Mario - Rehashed"
 
 [input]
 

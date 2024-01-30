@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://1sv5e5qir2yc"]
 
-[ext_resource type="Script" path="res://Player.cs" id="1_6yvpd"]
-[ext_resource type="Texture2D" uid="uid://drquoajtbauux" path="res://PrincessPeach.png" id="2_fn6hn"]
-[ext_resource type="Script" path="res://WorldManager.cs" id="3_nkonw"]
+[ext_resource type="Script" path="res://Scripts/Player.cs" id="1_6yvpd"]
+[ext_resource type="Texture2D" uid="uid://drquoajtbauux" path="res://Assets/Peach/PrincessPeach.png" id="2_fn6hn"]
+[ext_resource type="Script" path="res://Scripts/WorldManager.cs" id="3_nkonw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2vm75"]
 size = Vector2(69.5, 91.9318)
