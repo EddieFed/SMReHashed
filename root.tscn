@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://1sv5e5qir2yc"]
+[gd_scene load_steps=4 format=3 uid="uid://1sv5e5qir2yc"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_6yvpd"]
 [ext_resource type="Texture2D" uid="uid://drquoajtbauux" path="res://Assets/Peach/PrincessPeach.png" id="2_fn6hn"]
-[ext_resource type="Script" path="res://Scripts/WorldManager.cs" id="3_nkonw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2vm75"]
 size = Vector2(69.5, 91.9318)
@@ -10,7 +9,7 @@ size = Vector2(69.5, 91.9318)
 [node name="Root" type="Node2D"]
 
 [node name="Player" type="CharacterBody2D" parent="."]
-position = Vector2(490, 300)
+position = Vector2(490, 376)
 script = ExtResource("1_6yvpd")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
@@ -26,6 +25,3 @@ debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-4, 0)
-
-[node name="WorldManager" type="Node2D" parent="."]
-script = ExtResource("3_nkonw")

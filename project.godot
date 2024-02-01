@@ -14,6 +14,10 @@ config/name="Super Mario - Rehashed"
 run/main_scene="res://root.tscn"
 config/features=PackedStringArray("4.2", "C#", "Mobile")
 
+[autoload]
+
+WorldManager="*res://Scripts/WorldManager.cs"
+
 [dotnet]
 
 project/assembly_name="Super Mario - Rehashed"
