@@ -14,50 +14,11 @@ public partial class Player : CharacterBody2D
     
     // Get the gravity from the project settings so you can sync with rigid body nodes.
     private float _gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
-
-    public Player()
-    {
-        // Constructor
-    }
-
-    // We need to grab the auto loaded world manager!
-    public override void _Ready()
-    {
-
-    }
     
+    // From the singleton world manager render the chunk(s) requested
     private void RenderChunk(int i)
     {
-        
-    }
-    
-    public override void _Process(double delta)
-    {
-        GD.Print($"Character Pos: <X={this.Position.X}, Y={this.Position.Y}>");
-        GD.Print($"Chunk Index {_currentChunkIndex}");
-        // From the singleton world manager, grab the current active chunks (current and adjacent chunks)
-        WorldManager worldManager = WorldManager.GetWorldManager();
-        
-        float chunkSizeX = worldManager.GetChunkWidth();
-        GD.Print($"Chunk Size in pixels: {chunkSizeX}");
-        if (this.Position.X <= 0)
-        {
-            _currentChunkIndex = WorldManager.NumChunks - 1;
-            this.GlobalTranslate(new Vector2(chunkSizeX * (WorldManager.NumChunks), 0));
-        }
-        else if (this.Position.X >= chunkSizeX * (WorldManager.NumChunks))
-        {
-            _currentChunkIndex = 0;
-            this.GlobalTranslate(new Vector2(chunkSizeX * (WorldManager.NumChunks) * -1, 0));
-        }
-        else if (this.Position.X > (chunkSizeX * (_currentChunkIndex + 1)))
-        {
-            // We want to increment the chunk index IF the player has passed the edge of the chunk boundary
-            _currentChunkIndex = (_currentChunkIndex + 1) % WorldManager.NumChunks;
-        }
-        
-        
-        Node2D currentChunk = worldManager.GetChunk(_currentChunkIndex);
+        Node2D currentChunk = this._worldManager.GetChunk(i);
         if (currentChunk == null)
         {
             return;
@@ -66,10 +27,43 @@ public partial class Player : CharacterBody2D
         if (!GetTree().Root.GetChildren().Contains(currentChunk))
         {
             GetTree().Root.AddChild(currentChunk);
-            currentChunk.GlobalTranslate(new Vector2(chunkSizeX * (_currentChunkIndex), 0));
+            currentChunk.GlobalTranslate(new Vector2(WorldManager.ChunkSize * (i), 0));
         }
             
-        GD.Print($"Loaded Chunk #{_currentChunkIndex}");
+        GD.Print($"Loaded Chunk #{i}");
+    }
+    
+    public override void _Process(double delta)
+    {
+        // UGH there has to be a better place to put this call!!!
+        this._worldManager = WorldManager.GetWorldManager();
+        
+        GD.Print($"Character Pos: <X={this.Position.X}, Y={this.Position.Y}>");
+        GD.Print($"Chunk Index {_currentChunkIndex}");
+        
+        // We want to increment the chunk index IF the player has passed the edge of the chunk boundary
+        if (this.Position.X > (WorldManager.ChunkSize * (this._currentChunkIndex + 1)))
+        {
+            this._currentChunkIndex = Tools.Mod(this._currentChunkIndex + 1, WorldManager.NumChunks);
+            
+            // If they have passed the global boundary, teleport to other side!
+            if (this.Position.X > WorldManager.ChunkSize * (WorldManager.NumChunks))
+            {
+                this.GlobalTranslate(new Vector2(WorldManager.ChunkSize * (WorldManager.NumChunks) * -1, 0));
+            }
+        }
+        else if (this.Position.X < (WorldManager.ChunkSize * (this._currentChunkIndex)))
+        {
+            this._currentChunkIndex = Tools.Mod(this._currentChunkIndex - 1, WorldManager.NumChunks);
+            
+            // If they have passed the global boundary, teleport to other side!
+            if (this.Position.X < 0)
+            {
+                this.GlobalTranslate(new Vector2(WorldManager.ChunkSize * (WorldManager.NumChunks), 0));
+            }
+        }
+        
+        RenderChunk(this._currentChunkIndex);
     }
     
     public override void _PhysicsProcess(double delta)

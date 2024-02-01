@@ -11,7 +11,8 @@ public partial class WorldManager : Node2D
 
     private static WorldManager _worldManager = null;
     
-    public const int NumChunks = 3;
+    public const int NumChunks = 4;
+    public static int ChunkSize { get; private set; }
     private static readonly Array<Node2D> Chunks = new Array<Node2D>();
     // A chunk is build by a WorldManager (Node2D) > TileMap > TileSet > ...
     
@@ -25,6 +26,9 @@ public partial class WorldManager : Node2D
             Chunks.Add(chunk);
         }
         
+        TileMap tileMap = Chunks[0].GetNode<TileMap>("TileMap");
+        ChunkSize = tileMap.GetUsedRect().Size.X * tileMap.TileSet.TileSize.X * 3;
+        
     }
 
     // We want a singleton world manager for each game!
@@ -33,6 +37,7 @@ public partial class WorldManager : Node2D
         if (_worldManager == null)
         {
             _worldManager = new WorldManager();
+            
         }
 
         return _worldManager;
@@ -50,16 +55,5 @@ public partial class WorldManager : Node2D
         // GD.Print($"Successfully grabbed chunk of index {i} with value {ret}");
         return (ret ?? GetChunk(++i));
     }
-
-    // public float GetChunkWidth(int i)
-    // {
-    //     TileMap chunk = Chunks[i].GetNode<TileMap>("TileMap");
-    //     return chunk.GetUsedRect().Size.X * chunk.TileSet.TileSize.X * 3;
-    // }
     
-    public float GetChunkWidth()
-    {
-        TileMap chunk = Chunks[0].GetNode<TileMap>("TileMap");
-        return chunk.GetUsedRect().Size.X * chunk.TileSet.TileSize.X * 3;
-    }
 }
