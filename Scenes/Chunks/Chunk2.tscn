@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dbnld332ru7ll"]
 
-[ext_resource type="TileSet" uid="uid://dikxf4np13di" path="res://Prefabs/Chunks/Tiles.tres" id="1_f3j1t"]
+[ext_resource type="TileSet" uid="uid://dikxf4np13di" path="res://Scenes/Chunks/Tiles.tres" id="1_f3j1t"]
 
 [node name="Chunk2" type="Node2D"]
 

@@ -1,10 +1,8 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System;
 using Godot;
 using Godot.Collections;
 
-namespace SuperMarioRehashed.Scripts;
+namespace SuperMarioRehashed.Scripts.Managers;
 
 public partial class WorldManager : Node2D
 {
@@ -22,12 +20,12 @@ public partial class WorldManager : Node2D
         {
             int chunkNum = Random.Shared.Next(1, 4);
             GD.Print($"Using chunk #{chunkNum}");
-            Node2D chunk = (Node2D)GD.Load<PackedScene>($"res://Prefabs/Chunks/Chunk{chunkNum}.tscn").Instantiate();
+            Node2D chunk = (Node2D)GD.Load<PackedScene>($"res://Scenes/Chunks/Chunk{chunkNum}.tscn").Instantiate();
             Chunks.Add(chunk);
         }
         
         TileMap tileMap = Chunks[0].GetNode<TileMap>("TileMap");
-        ChunkSize = tileMap.GetUsedRect().Size.X * tileMap.TileSet.TileSize.X * 3;
+        ChunkSize = tileMap.GetUsedRect().Size.X * tileMap.TileSet.TileSize.X * (int)tileMap.Scale.X;
         
     }
 

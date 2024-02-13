@@ -6,4 +6,10 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>SuperMarioRehashed</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Scenes\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Scenes\**" />
+  </ItemGroup>
 </Project>

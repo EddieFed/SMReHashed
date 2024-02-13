@@ -1,6 +1,6 @@
-﻿namespace SuperMarioRehashed.Scripts;
+﻿namespace SuperMarioRehashed.Scripts.Util;
 
-public class Tools
+public static class Tools
 {
     // https://stackoverflow.com/a/1082938
     // % in C# is NOT Modulo, it is remainder, this is BULLSHIT

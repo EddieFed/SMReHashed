@@ -11,12 +11,14 @@ config_version=5
 [application]
 
 config/name="Super Mario - Rehashed"
-run/main_scene="res://Scene.tscn"
+run/main_scene="res://Scenes/Lobby.tscn"
 config/features=PackedStringArray("4.2", "C#", "Mobile")
+config/icon="res://Assets/Peach/PrincessPeach.png"
 
 [autoload]
 
-WorldManager="*res://Scripts/WorldManager.cs"
+WorldManager="*res://Scripts/Managers/WorldManager.cs"
+GameManager="*res://Scripts/Managers/GameManager.cs"
 
 [dotnet]
 
