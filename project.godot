@@ -20,6 +20,11 @@ config/icon="res://Assets/Peach/PrincessPeach.png"
 WorldManager="*res://Scripts/Managers/WorldManager.cs"
 GameManager="*res://Scripts/Managers/GameManager.cs"
 
+[display]
+
+window/stretch/mode="viewport"
+window/stretch/aspect="keep_width"
+
 [dotnet]
 
 project/assembly_name="Super Mario - Rehashed"

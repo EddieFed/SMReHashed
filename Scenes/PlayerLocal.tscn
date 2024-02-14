@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://cfqr5jj0gtdws"]
+
+[ext_resource type="Script" path="res://Scripts/Scenes/PlayerLocal.cs" id="1_qomk4"]
+[ext_resource type="Texture2D" uid="uid://drquoajtbauux" path="res://Assets/Peach/PrincessPeach.png" id="2_om5ix"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2vm75"]
+size = Vector2(69.5, 91.9318)
+
+[node name="Player" type="CharacterBody2D" groups=["Players"]]
+position = Vector2(490, 376)
+script = ExtResource("1_qomk4")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-0.500057, -0.500031)
+scale = Vector2(0.226829, 0.190196)
+texture = ExtResource("2_om5ix")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.25006, -1.03412)
+shape = SubResource("RectangleShape2D_2vm75")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)

@@ -96,6 +96,9 @@ public partial class Lobby : Control
 		_hostGame();
 		TransmitPlayerInformation(GetNode<LineEdit>("Username").Text, 1);
 
+		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/LobbyLoading.tscn").Instantiate<Node2D>();
+		GetTree().Root.AddChild(scene);
+		this.Hide();
 	}
 
 	public void _on_join_button_down()
@@ -106,7 +109,10 @@ public partial class Lobby : Control
 		_peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = _peer;
 		GD.Print("Joining game...");
-
+		
+		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/LobbyLoading.tscn").Instantiate<Node2D>();
+		GetTree().Root.AddChild(scene);
+		this.Hide();
 	}
 
 	public void _on_start_button_down()
@@ -136,6 +142,12 @@ public partial class Lobby : Control
 		Managers.SceneManager.GetSceneManager().LoadPlayer(Multiplayer.GetUniqueId());
 		GetTree().Root.AddChild(scene);
 
+		// remove the lobbyLoading Screen if it exists
+		var node = GetTree().Root.GetNode<LobbyLoading>("LobbyLoading");
+		if (node != null)
+		{
+			GetTree().Root.RemoveChild(node);
+		}
 		this.Hide();
 	}
 
