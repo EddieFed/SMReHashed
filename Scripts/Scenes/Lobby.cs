@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Godot;
 
@@ -10,6 +11,9 @@ public partial class Lobby : Control
 	[Export] private string _address = "127.0.0.1";
 
 	private ENetMultiplayerPeer _peer;
+	
+	private int _numPlayers = 0;
+	private const int MaxPlayers = 4;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -29,7 +33,7 @@ public partial class Lobby : Control
 	private void _hostGame()
 	{
 		_peer = new ENetMultiplayerPeer();
-		Error err = _peer.CreateServer(_port, 100);
+		Error err = _peer.CreateServer(_port, MaxPlayers);
 
 		if (err != Error.Ok)
 		{
@@ -58,6 +62,7 @@ public partial class Lobby : Control
 	// Runs when player disconnects, runs on ALL peers
 	private void PeerDisconnected(long id)
 	{
+		_numPlayers--;
 		GD.Print($"Player Disconnected: {id.ToString()}");
 		Managers.GameManager.Players.Remove(Managers.GameManager.Players.First(i => i.Id == id));
 		foreach (Node player in GetTree().GetNodesInGroup("Players"))
@@ -78,7 +83,12 @@ public partial class Lobby : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		
+		if (Multiplayer.GetUniqueId() == 1 && _numPlayers == MaxPlayers)
+		{
+			SetProcess(false);
+			int seed = Random.Shared.Next(1000);
+			Rpc(nameof(StartGame), seed);
+		}
 	}
 
 	public void _on_host_button_down()
@@ -101,20 +111,29 @@ public partial class Lobby : Control
 
 	public void _on_start_button_down()
 	{
-		Rpc(nameof(StartGame));
+		// only let the Host manually  
+		if (Multiplayer.GetUniqueId() != 1)
+		{
+			return;
+		}
+		SetProcess(false);	
+		int seed = Random.Shared.Next(1000);
+		Rpc(nameof(StartGame), seed);
 	}
 
 	// https://docs.godotengine.org/en/stable/tutorials/networking/high_level_multiplayer.html#initializing-the-network:~:text=The%20parameters%20and%20their%20functions%20are%20as%20follows%3A
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
-	private void StartGame()
+	private void StartGame(int seed)
 	{
 		foreach (PlayerInfo playerInfo in Managers.GameManager.Players)
 		{
 			GD.Print($"{playerInfo.Name} is Playing");
 		}
 		
-		
+		// Load the world
 		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/World.tscn").Instantiate<Node2D>();
+		Managers.WorldManager.GetWorldManager().GenerateWorld(new Random(seed));
+		Managers.SceneManager.GetSceneManager().LoadPlayer(Multiplayer.GetUniqueId());
 		GetTree().Root.AddChild(scene);
 
 		this.Hide();
@@ -136,6 +155,7 @@ public partial class Lobby : Control
 
 		if (Multiplayer.IsServer())
 		{
+			_numPlayers++;
 			foreach (PlayerInfo info in Managers.GameManager.Players)
 			{
 				Rpc(nameof(TransmitPlayerInformation), info.Name, info.Id);

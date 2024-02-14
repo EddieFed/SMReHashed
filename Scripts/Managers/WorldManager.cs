@@ -16,19 +16,23 @@ public partial class WorldManager : Node2D
     
     public override void _Ready()
     {
+        Node2D chunk = (Node2D)GD.Load<PackedScene>($"res://Scenes/Chunks/Chunk{1}.tscn").Instantiate();
+        TileMap tileMap = chunk.GetNode<TileMap>("TileMap");
+        ChunkSize = tileMap.GetUsedRect().Size.X * tileMap.TileSet.TileSize.X * (int)tileMap.Scale.X;
+    }
+    
+    public void GenerateWorld(Random generator)
+    {
         for (int i = 0; i < NumChunks; i++)
         {
-            int chunkNum = Random.Shared.Next(1, 4);
+            int chunkNum = generator.Next(1, 4);
             GD.Print($"Using chunk #{chunkNum}");
             Node2D chunk = (Node2D)GD.Load<PackedScene>($"res://Scenes/Chunks/Chunk{chunkNum}.tscn").Instantiate();
             Chunks.Add(chunk);
         }
         
-        TileMap tileMap = Chunks[0].GetNode<TileMap>("TileMap");
-        ChunkSize = tileMap.GetUsedRect().Size.X * tileMap.TileSet.TileSize.X * (int)tileMap.Scale.X;
         
     }
-
     // We want a singleton world manager for each game!
     public static WorldManager GetWorldManager()
     {

@@ -6,9 +6,25 @@ public partial class SceneManager : Node2D
 {
 
 	[Export] private PackedScene _playerScene;
+	private static SceneManager _sceneManager = null; 
 	
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public SceneManager()
+	{
+		_sceneManager = this;
+	}
+	
+	// We want a singleton scene manager for each game!
+	public static SceneManager GetSceneManager()
+	{
+		if (_sceneManager == null)
+		{
+			_sceneManager = new SceneManager();
+			
+		}
+		
+		return _sceneManager;
+	}
+	public void LoadPlayer(int id)
 	{
 		int index = 0;
 		foreach (PlayerInfo playerInfo in Managers.GameManager.Players)
@@ -17,7 +33,7 @@ public partial class SceneManager : Node2D
 			currentPlayer.Name = playerInfo.Id.ToString();
 			this.AddChild(currentPlayer);
 
-			currentPlayer.GlobalPosition = new Vector2((int)(WorldManager.ChunkSize / 2) * index + 100, 200);
+			currentPlayer.GlobalPosition = new Vector2((int)(WorldManager.ChunkSize) * 3 * index + 200, 200);
 			index++;
 		}
 	}
