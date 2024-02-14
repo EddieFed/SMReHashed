@@ -56,7 +56,7 @@ public partial class Lobby : Control
 	private void ConnectedToServer()
 	{
 		GD.Print("CONNECTION SUCCEEDED");
-		RpcId(1, nameof(TransmitPlayerInformation), GetNode<LineEdit>("Username").Text, Multiplayer.GetUniqueId());
+		RpcId(1, nameof(TransmitPlayerInformation), GetNode<LineEdit>("Username").Text, Multiplayer.GetUniqueId(), false);
 	}
 
 	// Runs when player disconnects, runs on ALL peers
@@ -83,7 +83,8 @@ public partial class Lobby : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (Multiplayer.GetUniqueId() == 1 && _numPlayers == MaxPlayers)
+		bool allReady = Managers.GameManager.Players.FindIndex(player => player.Ready == false) == -1;
+		if (Multiplayer.GetUniqueId() == 1 && _numPlayers == MaxPlayers || allReady && _numPlayers >= 2)
 		{
 			SetProcess(false);
 			int seed = Random.Shared.Next(1000);
@@ -94,7 +95,7 @@ public partial class Lobby : Control
 	public void _on_host_button_down()
 	{
 		_hostGame();
-		TransmitPlayerInformation(GetNode<LineEdit>("Username").Text, 1);
+		TransmitPlayerInformation(GetNode<LineEdit>("Username").Text, 1, false);
 
 		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/LobbyLoading.tscn").Instantiate<Node2D>();
 		GetTree().Root.AddChild(scene);
@@ -152,12 +153,13 @@ public partial class Lobby : Control
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-	private void TransmitPlayerInformation(string name, int id)
+	private void TransmitPlayerInformation(string name, int id, bool ready)
 	{
 		PlayerInfo playerInfo = new PlayerInfo()
 		{
 			Name = name,
-			Id = id
+			Id = id,
+			Ready = ready,
 		};
 
 		if (!Managers.GameManager.Players.Contains(playerInfo))
@@ -170,7 +172,7 @@ public partial class Lobby : Control
 			_numPlayers++;
 			foreach (PlayerInfo info in Managers.GameManager.Players)
 			{
-				Rpc(nameof(TransmitPlayerInformation), info.Name, info.Id);
+				Rpc(nameof(TransmitPlayerInformation), info.Name, info.Id, info.Ready);
 			}
 		}
 	}
