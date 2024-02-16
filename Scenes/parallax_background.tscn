@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7r7lejqc38e1"]
+
+[ext_resource type="Texture2D" uid="uid://c54w45wnrlird" path="res://Assets/kenny/Backgrounds/backgroundForest.png" id="1_pxlsl"]
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.2, 0.2)
+motion_mirroring = Vector2(1024, 1024)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer"]
+position = Vector2(89, -266)
+texture = ExtResource("1_pxlsl")
+centered = false
