@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Godot;
 using SuperMarioRehashed.Scripts.Util;
 
-namespace SuperMarioRehashed.Scripts.Scenes;
+namespace SuperMarioRehashed.Scripts;
 
 public partial class Player : CharacterBody2D
 {
@@ -110,7 +110,9 @@ public partial class Player : CharacterBody2D
 		}
 		else
 		{
-			GlobalPosition = GlobalPosition.Lerp(_syncPos, 0.5f);
+			// Commenting this out cases lag
+			GlobalPosition = GlobalPosition.Lerp(_syncPos, 0.9f);
+			// GlobalPosition = _syncPos;
 		}
 		
 		// Get child Image Node

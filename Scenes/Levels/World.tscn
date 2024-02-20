@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://1sv5e5qir2yc"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_4wwnj"]
-[ext_resource type="PackedScene" uid="uid://duvvju8cvuhx3" path="res://Scenes/Player.tscn" id="2_eydur"]
-[ext_resource type="PackedScene" uid="uid://b7r7lejqc38e1" path="res://Scenes/parallax_background.tscn" id="3_wtuod"]
+[ext_resource type="PackedScene" uid="uid://duvvju8cvuhx3" path="res://Scenes/Prefabs/Player.tscn" id="2_eydur"]
+[ext_resource type="PackedScene" uid="uid://b7r7lejqc38e1" path="res://Scenes/Prefabs/parallax_background.tscn" id="3_wtuod"]
 
 [node name="Scene" type="Node2D"]
 script = ExtResource("1_4wwnj")

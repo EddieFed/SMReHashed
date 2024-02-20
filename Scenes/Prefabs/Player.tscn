@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://duvvju8cvuhx3"]
 
-[ext_resource type="Script" path="res://Scripts/Scenes/Player.cs" id="1_it1xr"]
+[ext_resource type="Script" path="res://Scripts/Player.cs" id="1_it1xr"]
 [ext_resource type="Texture2D" uid="uid://drquoajtbauux" path="res://Assets/Peach/PrincessPeach.png" id="2_iakry"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2vm75"]

@@ -29,7 +29,7 @@ public partial class SceneManager : Node2D
 		int index = 0;
 		foreach (PlayerInfo playerInfo in Managers.GameManager.Players)
 		{
-			Scenes.Player currentPlayer = _playerScene.Instantiate<Scenes.Player>();
+			Player currentPlayer = _playerScene.Instantiate<Player>();
 			currentPlayer.Name = playerInfo.Id.ToString();
 			this.AddChild(currentPlayer);
 

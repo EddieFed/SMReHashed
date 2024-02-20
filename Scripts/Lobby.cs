@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Godot;
 
-namespace SuperMarioRehashed.Scripts.Scenes;
+namespace SuperMarioRehashed.Scripts;
 
 public partial class Lobby : Control
 {
@@ -97,7 +97,7 @@ public partial class Lobby : Control
 		_hostGame();
 		TransmitPlayerInformation(GetNode<LineEdit>("Username").Text, 1, false);
 
-		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/LobbyLoading.tscn").Instantiate<Node2D>();
+		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
 		GetTree().Root.AddChild(scene);
 		this.Hide();
 	}
@@ -111,7 +111,7 @@ public partial class Lobby : Control
 		Multiplayer.MultiplayerPeer = _peer;
 		GD.Print("Joining game...");
 		
-		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/LobbyLoading.tscn").Instantiate<Node2D>();
+		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
 		GetTree().Root.AddChild(scene);
 		this.Hide();
 	}
@@ -138,7 +138,7 @@ public partial class Lobby : Control
 		}
 		
 		// Load the world
-		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/World.tscn").Instantiate<Node2D>();
+		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/World.tscn").Instantiate<Node2D>();
 		Managers.WorldManager.GetWorldManager().GenerateWorld(new Random(seed));
 		Managers.SceneManager.GetSceneManager().LoadPlayer(Multiplayer.GetUniqueId());
 		GetTree().Root.AddChild(scene);

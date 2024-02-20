@@ -1,15 +1,14 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using SuperMarioRehashed.Scripts.Managers;
-using SuperMarioRehashed.Scripts.Scenes;
 
-namespace SuperMarioRehashed.Scripts.Scenes;
+namespace SuperMarioRehashed.Scripts;
 
 
 public partial class LobbyLoading : Node2D
 {
+
+	[Export] private PackedScene _chunk;
+	
 	// Called when the node enters the scene tree for the first time.
 	private ItemList _playerList;
 	private int _playerId;
@@ -24,12 +23,12 @@ public partial class LobbyLoading : Node2D
 		_playerId = Multiplayer.GetUniqueId();
 		_updateList = false;
 		
-		GD.Print($"Using chunk #{1}");
-		Node2D chunk = (Node2D)GD.Load<PackedScene>($"res://Scenes/Chunks/Chunk{1}.tscn").Instantiate();
-		this.AddChild(chunk);
+		GD.Print($"Using Chunk defined in editor!");
+		Node2D chunk = (Node2D)_chunk.Instantiate();
+		this.AddChild(_chunk.Instantiate());
 
 		chunk.GlobalTranslate(new Vector2(0, 0));
-		PlayerLocal currentPlayer = (PlayerLocal)GD.Load<PackedScene>("res://Scenes/PlayerLocal.tscn").Instantiate();
+		PlayerLocal currentPlayer = (PlayerLocal)GD.Load<PackedScene>("res://Scenes/Prefabs/PlayerLocal.tscn").Instantiate();
 		this.AddChild(currentPlayer);
 
 	}

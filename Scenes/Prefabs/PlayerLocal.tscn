@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cfqr5jj0gtdws"]
 
-[ext_resource type="Script" path="res://Scripts/Scenes/PlayerLocal.cs" id="1_qomk4"]
+[ext_resource type="Script" path="res://Scripts/PlayerLocal.cs" id="1_qomk4"]
 [ext_resource type="Texture2D" uid="uid://drquoajtbauux" path="res://Assets/Peach/PrincessPeach.png" id="2_om5ix"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2vm75"]

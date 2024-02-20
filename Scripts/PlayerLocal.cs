@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Godot;
 using SuperMarioRehashed.Scripts.Util;
 
-namespace SuperMarioRehashed.Scripts.Scenes;
+namespace SuperMarioRehashed.Scripts;
 
 public partial class PlayerLocal : CharacterBody2D
 {

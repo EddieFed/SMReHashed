@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Super Mario - Rehashed"
-run/main_scene="res://Scenes/Lobby.tscn"
+run/main_scene="res://Scenes/Levels/Lobby.tscn"
 config/features=PackedStringArray("4.2", "C#", "Mobile")
 config/icon="res://Assets/Peach/PrincessPeach.png"
 
