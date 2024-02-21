@@ -121,31 +121,35 @@ public partial class Player : CharacterBody2D
 		{
 			sprite2D.FlipH = !(_direction > 0); // Flip if NOT moving right
 		}
-		
-		
-		
 	}
-	private void _on_area_2d_body_entered(Area2D body)
-	{
-		addItem();
-	}
+	
+	//Handles Keybinds
 	public override void _Input(InputEvent @event)
 	{
+		//Pickup Item 
 		if (@event.IsActionPressed("action_grab"))
 		{
-			addItem();
-			
+			this.addItem("Mushroom");
+		}
+		//Displays Inventory
+		if (@event.IsActionPressed("display_inventory"))
+		{
+			this.displayInventory();
 		}
 	}
-	public void addItem() {
-		items.Add("Coin");
+	
+	//Adds items to this character
+	public void addItem(string i) {
+		this.items.Add(i);
+	}
+	
+	private void displayInventory() {
 		string m = "";
 		foreach (string i in items) {
 			m += i + ",";	
 		}
 		GD.Print(m);
 	}
-	
 	
 }
 

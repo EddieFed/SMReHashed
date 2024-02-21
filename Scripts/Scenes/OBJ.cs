@@ -1,15 +1,15 @@
 using Godot;
 using System;
+using SuperMarioRehashed.Scripts.Scenes;
+
 
 public partial class OBJ : Area2D
 {
 	int max_collisions = 6;
-	private void _on_body_entered(CharacterBody2D body)
-	{	
-		
-		//body.addItem();
-		GD.Print("Collected Block");
-		//QueueFree();
+	private void _on_body_entered(Player p)
+	{
+		p.addItem("Coin");
+		QueueFree();
 	}
 	
 	// Called when the node enters the scene tree for the first time.
@@ -21,14 +21,7 @@ public partial class OBJ : Area2D
 	public override void _Process(double delta)
 	{
 	}
-	public override void _PhysicsProcess(double delta) {
-		var collision_count = 0;
-		var collision = MoveAndCollide(Velocity * delta);
-		
-		 while(collision && collision_count < max_collisions) {
-			var collider = collision.get_collider();
-		}
-	}
+	
 }
 
 
