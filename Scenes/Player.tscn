@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://duvvju8cvuhx3"]
+[gd_scene load_steps=6 format=3 uid="uid://duvvju8cvuhx3"]
 
 [ext_resource type="Script" path="res://Scripts/Scenes/Player.cs" id="1_it1xr"]
 [ext_resource type="Texture2D" uid="uid://drquoajtbauux" path="res://Assets/Peach/PrincessPeach.png" id="2_iakry"]
@@ -13,6 +13,9 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:_direction")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_18n2u"]
+size = Vector2(69, 92)
 
 [node name="Player" type="CharacterBody2D" groups=["Players"]]
 position = Vector2(490, 376)
@@ -34,3 +37,11 @@ position = Vector2(-4, 0)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_2iaya")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-1.5, -1)
+shape = SubResource("RectangleShape2D_18n2u")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
