@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using SuperMarioRehashed.Scripts.Managers;
 
 namespace SuperMarioRehashed.Scripts;
 
@@ -13,6 +14,8 @@ public partial class LobbyLoading : Node2D
 	private ItemList _playerList;
 	private int _playerId;
 	private bool _updateList;
+	private bool _countDownStart;
+
 	
 	private Texture2D _checkIcon = GD.Load<Texture2D>("res://Assets/Icons/CheckIcon.svg");
 	private Texture2D _crossIcon = GD.Load<Texture2D>("res://Assets/Icons/CrossIcon.svg");
@@ -22,11 +25,13 @@ public partial class LobbyLoading : Node2D
 		_playerList = this.GetChild<ItemList>(0);
 		_playerId = Multiplayer.GetUniqueId();
 		_updateList = false;
+		_countDownStart = false;
+
 		
 		GD.Print($"Using Chunk defined in editor!");
 		Node2D chunk = (Node2D)_chunk.Instantiate();
 		this.AddChild(_chunk.Instantiate());
-
+		GameManager.GameStatus = GameManager.GameStatuses.InLobby;
 		chunk.GlobalTranslate(new Vector2(0, 0));
 		PlayerLocal currentPlayer = (PlayerLocal)GD.Load<PackedScene>("res://Scenes/Prefabs/PlayerLocal.tscn").Instantiate();
 		this.AddChild(currentPlayer);
@@ -46,6 +51,14 @@ public partial class LobbyLoading : Node2D
 			{
 				_playerList.AddItem(player.Name == "" ? "{TEMP_NAME}" : player.Name, player.Ready ? _checkIcon : _crossIcon);
 			}
+		} else if (Managers.GameManager.GameStatus == GameManager.GameStatuses.StartTimer && !_countDownStart)
+		{
+			_countDownStart = true;
+			Label countDown = this.GetChild<Label>(2);
+			countDown.Visible = true;
+			
+			Godot.Timer test = countDown.GetNode<Godot.Timer>("StartTimer");
+			test.Start();
 		}
 		
 	}
@@ -72,6 +85,15 @@ public partial class LobbyLoading : Node2D
 				Name = players[playerIndex].Name,
 				Ready = status,
 			};
+		}
+	}
+	
+	private void _on_start_timer_timeout()
+	{
+		this.GetChild<Label>(2).Text = $"{(this.GetChild<Label>(2).Text.ToInt() - 1)}";
+		if (this.GetChild<Label>(2).Text.ToInt() == 0)
+		{
+			Managers.GameManager.GameStatus = GameManager.GameStatuses.StartingGame;
 		}
 	}
 }

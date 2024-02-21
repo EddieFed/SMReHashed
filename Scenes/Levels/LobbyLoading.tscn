@@ -20,9 +20,25 @@ offset_top = 34.0
 offset_right = 788.0
 offset_bottom = 58.0
 
+[node name="CountDown" type="Label" parent="."]
+visible = false
+top_level = true
+offset_left = -1.0
+offset_top = -16.0
+offset_right = 1157.0
+offset_bottom = 666.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 500
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartTimer" type="Timer" parent="CountDown"]
+
 [node name="ParallaxBackground" parent="." instance=ExtResource("2_phvj3")]
 offset = Vector2(-400, 0)
 scale = Vector2(1, 1)
 transform = Transform2D(1, 0, 0, 1, -400, 0)
 
 [connection signal="toggled" from="CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="timeout" from="CountDown/StartTimer" to="." method="_on_start_timer_timeout"]

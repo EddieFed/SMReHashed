@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Godot;
+using SuperMarioRehashed.Scripts.Managers;
 
 namespace SuperMarioRehashed.Scripts;
 
@@ -84,9 +85,13 @@ public partial class Lobby : Control
 	public override void _Process(double delta)
 	{
 		bool allReady = Managers.GameManager.Players.FindIndex(player => player.Ready == false) == -1;
-		if (Multiplayer.GetUniqueId() == 1 && _numPlayers == MaxPlayers || allReady && _numPlayers >= 2)
+		GameManager.GameStatuses status = Managers.GameManager.GameStatus;
+		if (status == GameManager.GameStatuses.InLobby && Multiplayer.GetUniqueId() == 1 && (_numPlayers == MaxPlayers || allReady && _numPlayers >= 2))
 		{
-			SetProcess(false);
+			Rpc(nameof(StartTimer));
+		} else if (Multiplayer.GetUniqueId() == 1 && Managers.GameManager.GameStatus == GameManager.GameStatuses.StartingGame)
+		{
+			this.SetProcess(false);
 			int seed = Random.Shared.Next(1000);
 			Rpc(nameof(StartGame), seed);
 		}
@@ -132,6 +137,7 @@ public partial class Lobby : Control
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void StartGame(int seed)
 	{
+		Managers.GameManager.GameStatus = GameManager.GameStatuses.InGame;
 		foreach (PlayerInfo playerInfo in Managers.GameManager.Players)
 		{
 			GD.Print($"{playerInfo.Name} is Playing");
@@ -177,4 +183,9 @@ public partial class Lobby : Control
 		}
 	}
 	
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void StartTimer()
+	{
+		Managers.GameManager.GameStatus = GameManager.GameStatuses.StartTimer;
+	}
 }

@@ -5,7 +5,19 @@ namespace SuperMarioRehashed.Scripts.Managers;
 
 public partial class GameManager : Node
 {
+	public enum GameStatuses
+	{
+		GameSelect = 0,
+		InLobby,
+		StartTimer,
+		StartingGame,
+		InGame,
+	};
+	
 	public static readonly List<PlayerInfo> Players = new List<PlayerInfo>();
+	
+	public static GameStatuses GameStatus = GameStatuses.GameSelect;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
