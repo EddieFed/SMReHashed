@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using SuperMarioRehashed.Scripts.Scenes;
+using SuperMarioRehashed.Scripts;
 
 
 public partial class OBJ : Area2D
@@ -8,7 +8,7 @@ public partial class OBJ : Area2D
 	int max_collisions = 6;
 	private void _on_body_entered(Player p)
 	{
-		p.addItem("Coin");
+		p.AddItem("Coin");
 		QueueFree();
 	}
 	

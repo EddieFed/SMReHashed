@@ -40,6 +40,19 @@ public partial class WorldManager : Node2D
 
 		return _worldManager;
 	}
+	
+	public void GenerateWorld(Random generator)
+	{
+		for (int i = 0; i < NumChunks; i++)
+		{
+			int chunkNum = generator.Next(1, 4);
+			GD.Print($"Using chunk #{chunkNum}");
+			Node2D chunk = (Node2D)GD.Load<PackedScene>($"res://Scenes/Chunks/Chunk{chunkNum}.tscn").Instantiate();
+			Chunks.Add(chunk);
+		}
+        
+        
+	}
 
 	public Node2D GetChunk(int i)
 	{
