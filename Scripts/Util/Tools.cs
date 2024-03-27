@@ -1,4 +1,6 @@
-﻿namespace SuperMarioRehashed.Scripts.Util;
+﻿using Godot;
+
+namespace SuperMarioRehashed.Scripts.Util;
 
 public static class Tools
 {

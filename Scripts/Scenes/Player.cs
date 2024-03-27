@@ -1,9 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Godot;
 using SuperMarioRehashed.Scripts.Util;
+using System.Collections;
+using System.Threading;
+using SuperMarioRehashed.Scripts.GameObjects;
 
-namespace SuperMarioRehashed.Scripts;
+namespace SuperMarioRehashed.Scripts.Scenes;
 
 public partial class Player : CharacterBody2D
 {
@@ -12,10 +14,13 @@ public partial class Player : CharacterBody2D
 	private Managers.WorldManager _worldManager;
 	private int _currentChunkIndex = 0;
 	private LinkedList<Node2D> _activeChunks = new LinkedList<Node2D>();
-	private ArrayList items = new ArrayList();
+	private ArrayList _items = new ArrayList();
+	private static readonly PackedScene Fireball = GD.Load<PackedScene>("res://Scenes/Prefabs/Fireball.tscn");
+	private Sprite2D _sprite2D;
+	private Area2D _area2D;
+	private float _health = 100.0f;
 
-	
-	private float _direction = 0.0f;
+	private int _direction = 1;
 	
 	// Multiplayer authority??? Not really sure wtf this does, but it locks you out of effecting other players
 	private int _authority;
@@ -53,6 +58,22 @@ public partial class Player : CharacterBody2D
 			GetNode<Camera2D>("Camera2D").MakeCurrent();
 		}
 		
+		_sprite2D = GetNode<Sprite2D>("Sprite2D");
+		_area2D = GetNode<Area2D>("Area2D");
+		_area2D.Monitoring = true;
+		_area2D.BodyEntered += GotHit;
+	}
+
+	private void GotHit(Node2D node2D)
+	{
+		if (node2D is not Fireball fireball) return;
+		
+		_health -= 10.0f;
+		_sprite2D.Modulate = Colors.Red;
+		GetTree().CreateTimer(0.1).Timeout += () =>
+		{
+			_sprite2D.Modulate = Colors.White;
+		};
 	}
 
 	public override void _Process(double delta)
@@ -104,7 +125,7 @@ public partial class Player : CharacterBody2D
 			}
 
 			// Get the input direction.
-			_direction = Input.GetAxis("move_left", "move_right");
+			_direction = (int) Input.GetAxis("move_left", "move_right");
 			velocity.X = _direction * _speed;
 			this.Velocity = velocity;
 
@@ -118,40 +139,101 @@ public partial class Player : CharacterBody2D
 			// GlobalPosition = _syncPos;
 		}
 		
-		// Get child Image Node
-		Sprite2D sprite2D = GetNode<Sprite2D>("Sprite2D");
 		if (_direction != 0)
 		{
-			sprite2D.FlipH = !(_direction > 0); // Flip if NOT moving right
+			_sprite2D.FlipH = !(_direction > 0); // Flip if NOT moving right
 		}
 		
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void ShootFireball()
+	{
+		/*if (!items.Contains(ObjectType.FireFlower)) return;*/
+
+		Fireball fireball = (Fireball) Fireball.Instantiate();
+		fireball.Direction = (_sprite2D.FlipH) ? -1 : 1; // LOL
+		fireball.Position = new Vector2(this.Position.X + 50 * fireball.Direction, this.Position.Y);
+		
+		// Create timer to destroy!
+		Thread t = new Thread(() =>
+		{
+			Thread.Sleep(700);
+			fireball.QueueFree();
+		});
+		t.Start();
+		
+		this.GetParent().AddChild(fireball);
 	}
 	
 	//Handles Keybinds
 	public override void _Input(InputEvent @event)
 	{
-		//Pickup Item 
+		// DEBUG
+		/*if ()
+		{
+			
+		}*/
+		
+		
+		// Only allow key presses for local player!
+		if (_authority != Multiplayer.GetUniqueId()) return;
+		
+		//Pickup Item (e)
 		if (@event.IsActionPressed("action_grab"))
 		{
-			this.addItem("Mushroom");
+			this.AddItem(ObjectType.Mushroom);
 		}
-		//Displays Inventory
+		
+		if (@event.IsActionPressed("action_attack"))
+		{
+			Rpc(nameof(ShootFireball));
+		}
+
+		//Displays Inventory (f)
 		if (@event.IsActionPressed("display_inventory"))
 		{
-			this.displayInventory();
+			this.DisplayInventory();
 		}
 	}
 	
 	//Adds items to this character
-	public void addItem(string i) {
-		this.items.Add(i);
+	public void AddItem(ObjectType objectType) {
+		this._items.Add(objectType);
+	}
+
+	public void RemoveItemType(ObjectType objectType)
+	{
+		this._items.Remove(objectType);
 	}
 	
-	private void displayInventory() {
-		string m = "";
-		foreach (string i in items) {
-			m += i + ",";	
+	private void DisplayInventory()
+	{
+		string s = "Inventory: [";
+		foreach (ObjectType objectType in _items)
+		{
+			switch (objectType)
+			{
+				case ObjectType.Coin:
+					s += "Coin ";
+					break;
+				case ObjectType.Mushroom:
+					s += "Mushroom ";
+					break;
+				case ObjectType.FireFlower:
+					s += "FireFlower ";
+					break;
+				case ObjectType.IceFlower:
+					s += "IceFlower ";
+					break;
+				default:
+					s += "Illegal Item!";
+					break;
+			}
 		}
-		GD.Print(m);
+
+		s += "]";
+		GD.Print(s);
 	}
+	
 }

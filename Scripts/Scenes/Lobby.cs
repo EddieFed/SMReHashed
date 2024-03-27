@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Linq;
 using Godot;
 using SuperMarioRehashed.Scripts.Managers;
+using SuperMarioRehashed.Scripts.Util;
 
-namespace SuperMarioRehashed.Scripts;
+namespace SuperMarioRehashed.Scripts.Scenes;
 
 public partial class Lobby : Control
 {
@@ -28,9 +29,6 @@ public partial class Lobby : Control
 		if (OS.GetCmdlineArgs().Contains("--server"))
 		{
 			_hostGame();
-			Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
-			// We need to use CallDeferred since there might be timing issues with "--server"
-			CallDeferred("AddLobbyLoading", scene);
 		}
 
 	}
@@ -49,7 +47,9 @@ public partial class Lobby : Control
 		_peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = _peer;
 		GD.Print("Waiting for players!");
-		
+		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
+		// We need to use CallDeferred since there might be timing issues with "--server"
+		CallDeferred("AddLobbyLoading", scene);
 	}
 
 	private void AddLobbyLoading(Node2D scene)
@@ -68,6 +68,7 @@ public partial class Lobby : Control
 	private void ConnectedToServer()
 	{
 		GD.Print("CONNECTION SUCCEEDED");
+		RpcId(1, nameof(TransmitPlayerInformation), GetNode<LineEdit>("Username").Text, Multiplayer.GetUniqueId());
 	}
 
 	// Runs when player disconnects, runs on ALL peers
@@ -90,7 +91,7 @@ public partial class Lobby : Control
 	{
 		if (Multiplayer.IsServer())
 		{
-			String connected = (!_inGame) ? "You're good Bro" : "Get off my dick";
+			String connected = (!_inGame) ? "You're good Bro" : "Get off my dick"; // No
 			RpcId(id, "CanConnect", connected);
 			// kick player if the game is running
 			if (_inGame) Multiplayer.MultiplayerPeer.DisconnectPeer((int)id, true);
@@ -134,11 +135,7 @@ public partial class Lobby : Control
 	public void _on_host_button_down()
 	{
 		_hostGame();
-		
 		TransmitPlayerInformation(GetNode<LineEdit>("Username").Text, 1, false);
-		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
-		GetTree().Root.AddChild(scene);
-		this.Hide();
 	}
 
 	public void _on_join_button_down()
@@ -184,7 +181,7 @@ public partial class Lobby : Control
 		GetTree().Root.AddChild(scene);
 
 		// remove the lobbyLoading Screen if it exists
-		var node = GetTree().Root.GetNode<LobbyLoading>("LobbyLoading");
+		var node = GetTree().Root.GetNode<Scenes.LobbyLoading>("LobbyLoading");
 		if (node != null)
 		{
 			GetTree().Root.RemoveChild(node);
@@ -192,7 +189,7 @@ public partial class Lobby : Control
 		this.Hide();
 	}
 
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void TransmitPlayerInformation(string name, int id, bool ready)
 	{
 		PlayerInfo playerInfo = new PlayerInfo()
