@@ -9,7 +9,7 @@ transform = Transform2D(1.5, 0, 0, 1.5, 0, -350)
 scroll_base_scale = Vector2(0.5, 0.5)
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="."]
-motion_mirroring = Vector2(1024, 0)
+motion_mirroring = Vector2(1024, 0.001)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer"]
 texture = ExtResource("1_pxlsl")
