@@ -12,7 +12,8 @@ public partial class Player : CharacterBody2D
 	private Managers.WorldManager _worldManager;
 	private int _currentChunkIndex = 0;
 	private LinkedList<Node2D> _activeChunks = new LinkedList<Node2D>();
-	private readonly ArrayList _items = new ArrayList();
+	private ArrayList items = new ArrayList();
+
 	
 	private float _direction = 0.0f;
 	
@@ -132,23 +133,23 @@ public partial class Player : CharacterBody2D
 		//Pickup Item 
 		if (@event.IsActionPressed("action_grab"))
 		{
-			this.AddItem("Mushroom");
+			this.addItem("Mushroom");
 		}
 		//Displays Inventory
 		if (@event.IsActionPressed("display_inventory"))
 		{
-			this.DisplayInventory();
+			this.displayInventory();
 		}
 	}
 	
 	//Adds items to this character
-	public void AddItem(string i) {
-		this._items.Add(i);
+	public void addItem(string i) {
+		this.items.Add(i);
 	}
 	
-	private void DisplayInventory() {
+	private void displayInventory() {
 		string m = "";
-		foreach (string i in _items) {
+		foreach (string i in items) {
 			m += i + ",";	
 		}
 		GD.Print(m);

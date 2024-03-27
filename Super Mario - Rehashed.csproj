@@ -12,4 +12,7 @@
   <ItemGroup>
     <EmbeddedResource Remove="Scenes\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripts\Scenes\" />
+  </ItemGroup>
 </Project>
