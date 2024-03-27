@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Godot;
+using SuperMarioRehashed.Scripts.Util;
 
 namespace SuperMarioRehashed.Scripts.Managers;
 
@@ -7,7 +8,7 @@ public partial class GameManager : Node
 {
 	public enum GameStatuses
 	{
-		GameSelect = 0,
+		GameSelect,
 		InLobby,
 		StartTimer,
 		StartingGame,

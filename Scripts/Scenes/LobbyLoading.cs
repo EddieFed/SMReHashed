@@ -1,8 +1,9 @@
-using Godot;
 using System.Collections.Generic;
+using Godot;
 using SuperMarioRehashed.Scripts.Managers;
+using SuperMarioRehashed.Scripts.Util;
 
-namespace SuperMarioRehashed.Scripts;
+namespace SuperMarioRehashed.Scripts.Scenes;
 
 
 public partial class LobbyLoading : Node2D
@@ -33,7 +34,7 @@ public partial class LobbyLoading : Node2D
 		this.AddChild(_chunk.Instantiate());
 		GameManager.GameStatus = GameManager.GameStatuses.InLobby;
 		chunk.GlobalTranslate(new Vector2(0, 0));
-		PlayerLocal currentPlayer = (PlayerLocal)GD.Load<PackedScene>("res://Scenes/Prefabs/PlayerLocal.tscn").Instantiate();
+		Scenes.PlayerLocal currentPlayer = (Scenes.PlayerLocal)GD.Load<PackedScene>("res://Scenes/Prefabs/PlayerLocal.tscn").Instantiate();
 		this.AddChild(currentPlayer);
 
 	}

@@ -1,4 +1,4 @@
-namespace SuperMarioRehashed.Scripts;
+namespace SuperMarioRehashed.Scripts.Util;
 
 public struct PlayerInfo
 {

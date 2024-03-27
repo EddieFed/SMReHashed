@@ -1,4 +1,6 @@
 using Godot;
+using SuperMarioRehashed.Scripts.Scenes;
+using SuperMarioRehashed.Scripts.Util;
 
 namespace SuperMarioRehashed.Scripts.Managers;
 
