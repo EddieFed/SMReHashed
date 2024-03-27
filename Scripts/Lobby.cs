@@ -15,6 +15,7 @@ public partial class Lobby : Control
 	
 	private int _numPlayers = 0;
 	private const int MaxPlayers = 4;
+	private bool _inGame = false;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -45,6 +46,15 @@ public partial class Lobby : Control
 		_peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = _peer;
 		GD.Print("Waiting for players!");
+		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
+		// We need to use CallDeferred since there might be timing issues with "--server"
+		CallDeferred("AddLobbyLoading", scene);
+	}
+
+	private void AddLobbyLoading(Node2D scene)
+	{
+		GetTree().Root.AddChild(scene);
+		this.Hide();
 	}
 
 	// Runs on a failed connection, ONLY runs on client
@@ -57,7 +67,6 @@ public partial class Lobby : Control
 	private void ConnectedToServer()
 	{
 		GD.Print("CONNECTION SUCCEEDED");
-		RpcId(1, nameof(TransmitPlayerInformation), GetNode<LineEdit>("Username").Text, Multiplayer.GetUniqueId(), false);
 	}
 
 	// Runs when player disconnects, runs on ALL peers
@@ -78,7 +87,31 @@ public partial class Lobby : Control
 	// Runs when a player connects, runs on ALL peers
 	private void PeerConnected(long id)
 	{
-		GD.Print($"Player Connected: {id.ToString()}");
+		if (Multiplayer.IsServer())
+		{
+			String connected = (!_inGame) ? "You're good Bro" : "Get off my dick";
+			RpcId(id, "CanConnect", connected);
+			// kick player if the game is running
+			if (_inGame) Multiplayer.MultiplayerPeer.DisconnectPeer((int)id, true);
+		}
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void CanConnect(String message)
+	{
+		if (message == "You're good Bro")
+		{
+			RpcId(1, nameof(TransmitPlayerInformation), GetNode<LineEdit>("Username").Text, Multiplayer.GetUniqueId(), false);
+			Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>(); 
+			GetTree().Root.AddChild(scene);
+			this.Hide();
+		}
+		else
+		{
+			_peer.Close();
+			Multiplayer.MultiplayerPeer.Dispose();
+		}
+		GD.Print($"{message}");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -100,11 +133,6 @@ public partial class Lobby : Control
 	public void _on_host_button_down()
 	{
 		_hostGame();
-		TransmitPlayerInformation(GetNode<LineEdit>("Username").Text, 1, false);
-
-		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
-		GetTree().Root.AddChild(scene);
-		this.Hide();
 	}
 
 	public void _on_join_button_down()
@@ -114,11 +142,6 @@ public partial class Lobby : Control
 		
 		_peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = _peer;
-		GD.Print("Joining game...");
-		
-		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
-		GetTree().Root.AddChild(scene);
-		this.Hide();
 	}
 
 	public void _on_start_button_down()
@@ -137,6 +160,11 @@ public partial class Lobby : Control
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void StartGame(int seed)
 	{
+		if (Multiplayer.IsServer())
+		{
+			_inGame = true;
+			GD.Print($"Server is no longer taking orders");
+		}
 		Managers.GameManager.GameStatus = GameManager.GameStatuses.InGame;
 		foreach (PlayerInfo playerInfo in Managers.GameManager.Players)
 		{
