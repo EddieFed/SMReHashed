@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dioselkjj6wqf"]
 
 [ext_resource type="TileSet" uid="uid://dikxf4np13di" path="res://Scenes/Chunks/Tiles.tres" id="1_q7nnm"]
-[ext_resource type="Script" path="res://Scripts/Scenes/OBJ.cs" id="2_yiv0x"]
+[ext_resource type="Script" path="res://Scripts/OBJ.cs" id="2_yiv0x"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_3e5xa"]
 

@@ -28,6 +28,9 @@ public partial class Lobby : Control
 		if (OS.GetCmdlineArgs().Contains("--server"))
 		{
 			_hostGame();
+			Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
+			// We need to use CallDeferred since there might be timing issues with "--server"
+			CallDeferred("AddLobbyLoading", scene);
 		}
 
 	}
@@ -46,9 +49,7 @@ public partial class Lobby : Control
 		_peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = _peer;
 		GD.Print("Waiting for players!");
-		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
-		// We need to use CallDeferred since there might be timing issues with "--server"
-		CallDeferred("AddLobbyLoading", scene);
+		
 	}
 
 	private void AddLobbyLoading(Node2D scene)
@@ -133,6 +134,11 @@ public partial class Lobby : Control
 	public void _on_host_button_down()
 	{
 		_hostGame();
+		
+		TransmitPlayerInformation(GetNode<LineEdit>("Username").Text, 1, false);
+		Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>();
+		GetTree().Root.AddChild(scene);
+		this.Hide();
 	}
 
 	public void _on_join_button_down()

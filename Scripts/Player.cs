@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Godot;
 using SuperMarioRehashed.Scripts.Util;
@@ -11,6 +12,8 @@ public partial class Player : CharacterBody2D
 	private Managers.WorldManager _worldManager;
 	private int _currentChunkIndex = 0;
 	private LinkedList<Node2D> _activeChunks = new LinkedList<Node2D>();
+	private ArrayList items = new ArrayList();
+
 	
 	private float _direction = 0.0f;
 	
@@ -122,5 +125,33 @@ public partial class Player : CharacterBody2D
 			sprite2D.FlipH = !(_direction > 0); // Flip if NOT moving right
 		}
 		
+	}
+	
+	//Handles Keybinds
+	public override void _Input(InputEvent @event)
+	{
+		//Pickup Item 
+		if (@event.IsActionPressed("action_grab"))
+		{
+			this.addItem("Mushroom");
+		}
+		//Displays Inventory
+		if (@event.IsActionPressed("display_inventory"))
+		{
+			this.displayInventory();
+		}
+	}
+	
+	//Adds items to this character
+	public void addItem(string i) {
+		this.items.Add(i);
+	}
+	
+	private void displayInventory() {
+		string m = "";
+		foreach (string i in items) {
+			m += i + ",";	
+		}
+		GD.Print(m);
 	}
 }

@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using SuperMarioRehashed.Scripts.Scenes;
+using SuperMarioRehashed.Scripts;
 
 
 public partial class OBJ : Area2D
