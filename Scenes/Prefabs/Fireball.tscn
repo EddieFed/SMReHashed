@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dtffgt2c32f1d"]
 
-[ext_resource type="Script" path="res://Scripts/Scenes/Fireball.cs" id="1_pehdd"]
+[ext_resource type="Script" path="res://Scripts/Scenes/Projectiles/Fireball.cs" id="1_pehdd"]
 [ext_resource type="Texture2D" uid="uid://gn2q4pg48460" path="res://Assets/Misc/fireball.png" id="1_vjh18"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_50muc"]
