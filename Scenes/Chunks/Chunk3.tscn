@@ -2,7 +2,7 @@
 
 [ext_resource type="TileSet" uid="uid://dikxf4np13di" path="res://Scenes/Chunks/Tiles.tres" id="1_u5kyu"]
 [ext_resource type="PackedScene" uid="uid://cn34d5bbdbfyf" path="res://Scenes/Prefabs/Coin.tscn" id="2_6vgyt"]
-[ext_resource type="PackedScene" uid="uid://cc62i58a8qn65" path="res://Scenes/Prefabs/FireFlower.tscn" id="3_gbnsh"]
+[ext_resource type="PackedScene" uid="uid://brqik7cl0nj4e" path="res://Scenes/Prefabs/QuestionBlock.tscn" id="3_v35en"]
 
 [node name="Chunk3" type="Node2D"]
 
@@ -15,5 +15,5 @@ layer_0/tile_data = PackedInt32Array(524293, 196609, 4, 524294, 196609, 4, 52429
 [node name="Coin" parent="." instance=ExtResource("2_6vgyt")]
 position = Vector2(536, 403)
 
-[node name="FireFlower" parent="." instance=ExtResource("3_gbnsh")]
-position = Vector2(138, 470)
+[node name="QuestionBlock" parent="." instance=ExtResource("3_v35en")]
+position = Vector2(833, 377)
