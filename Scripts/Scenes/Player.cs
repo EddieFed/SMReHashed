@@ -93,6 +93,7 @@ public partial class Player : CharacterBody2D
 		{ 
 			_health -= 10.0f;
 			_sprite2D.Modulate = Colors.Red;
+			setHealthBar();
 			GetTree().CreateTimer(0.1).Timeout += () =>
 			{
 				_sprite2D.Modulate = Colors.White;
@@ -104,6 +105,7 @@ public partial class Player : CharacterBody2D
 			_frozen = true;
 			_health -= 2.0f;
 			_speed = 20.0f;
+			setHealthBar();
 			_sprite2D.Modulate = Colors.Blue;
 			GetTree().CreateTimer(5).Timeout += () =>
 			{
@@ -115,7 +117,7 @@ public partial class Player : CharacterBody2D
 	}
 
 	public void setHealthBar() {
-		_healthBar.value = _health;
+		_healthBar.Value = _health;
 	}
 
 	public override void _Process(double delta)
