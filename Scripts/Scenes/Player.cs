@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Godot;
 using SuperMarioRehashed.Scripts.Util;
 using System.Collections;
@@ -18,6 +18,7 @@ public partial class Player : CharacterBody2D
 	// Child nodes
 	private Area2D _area2D;
 	private Sprite2D _sprite2D;
+	private ProgressBar _healthBar;
 	
 	// Stats/properties
 	private float _speed = 300.0f;
@@ -76,6 +77,7 @@ public partial class Player : CharacterBody2D
 		_area2D = GetNode<Area2D>("Area2D");
 		_area2D.Monitoring = true;
 		_area2D.BodyEntered += GotHit;
+		_healthBar = GetNode<ProgressBar>("ProgressBar");
 	}
 
 	// TODO: generalize this to make it work for ANY object hit maybe using a switch statement?
@@ -110,6 +112,10 @@ public partial class Player : CharacterBody2D
 				_speed = 300.0f;
 			};
 		}
+	}
+
+	public void setHealthBar() {
+		_healthBar.value = _health;
 	}
 
 	public override void _Process(double delta)
