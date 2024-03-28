@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://2br4t5mj3mrf"]
+
+[ext_resource type="Script" path="res://Scripts/Scenes/Projectiles/Iceball.cs" id="1_q3y0f"]
+[ext_resource type="Texture2D" uid="uid://gn2q4pg48460" path="res://Assets/Misc/fireball.png" id="2_mgkhj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_50muc"]
+radius = 12.0
+
+[node name="Iceball" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_q3y0f")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_mgkhj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_50muc")

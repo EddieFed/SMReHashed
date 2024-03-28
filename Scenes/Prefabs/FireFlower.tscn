@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cc62i58a8qn65"]
 
 [ext_resource type="Script" path="res://Scripts/GameObjects/FireFlowerObject.cs" id="1_v6rhp"]
-[ext_resource type="Texture2D" uid="uid://boip4vlm8k8i1" path="res://Assets/Flowers/FireFlower.png" id="2_2km2q"]
+[ext_resource type="Texture2D" uid="uid://boip4vlm8k8i1" path="res://Assets/Misc/FireFlower.png" id="2_2km2q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wf12n"]
 

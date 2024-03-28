@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://boip4vlm8k8i1"
-path="res://.godot/imported/FireFlower.png-c55d4e031e9963afd24f6a13af8ec7fd.ctex"
+uid="uid://dfwbhhdxs14i7"
+path="res://.godot/imported/IceFlower.png-c174a46e5305b6638295db5bfd4ae088.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Flowers/FireFlower.png"
-dest_files=["res://.godot/imported/FireFlower.png-c55d4e031e9963afd24f6a13af8ec7fd.ctex"]
+source_file="res://Assets/Misc/IceFlower.png"
+dest_files=["res://.godot/imported/IceFlower.png-c174a46e5305b6638295db5bfd4ae088.ctex"]
 
 [params]
 

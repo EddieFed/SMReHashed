@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dioselkjj6wqf"]
+[gd_scene load_steps=5 format=3 uid="uid://dioselkjj6wqf"]
 
 [ext_resource type="TileSet" uid="uid://dikxf4np13di" path="res://Scenes/Chunks/Tiles.tres" id="1_q7nnm"]
-[ext_resource type="PackedScene" path="res://Scenes/Prefabs/Coin.tscn" id="2_fkb34"]
+[ext_resource type="PackedScene" uid="uid://cn34d5bbdbfyf" path="res://Scenes/Prefabs/Coin.tscn" id="2_fkb34"]
+[ext_resource type="PackedScene" uid="uid://cc62i58a8qn65" path="res://Scenes/Prefabs/FireFlower.tscn" id="3_45few"]
+[ext_resource type="PackedScene" uid="uid://dpwx7ra708sb3" path="res://Scenes/Prefabs/IceFlower.tscn" id="4_ibxag"]
 
 [node name="Chunk1" type="Node2D"]
 
@@ -20,3 +22,9 @@ position = Vector2(235, 468)
 
 [node name="Coin3" parent="." instance=ExtResource("2_fkb34")]
 position = Vector2(793, 514)
+
+[node name="FireFlower" parent="." instance=ExtResource("3_45few")]
+position = Vector2(526, 463)
+
+[node name="IceFlower" parent="." instance=ExtResource("4_ibxag")]
+position = Vector2(355, 467)
