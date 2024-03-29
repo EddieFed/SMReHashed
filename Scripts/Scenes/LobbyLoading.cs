@@ -50,7 +50,7 @@ public partial class LobbyLoading : Node2D
 			_playerList.Clear();
 			foreach (PlayerInfo player in Managers.GameManager.Players)
 			{
-				_playerList.AddItem(player.Name == "" ? "{TEMP_NAME}" : player.Name, player.Ready ? _checkIcon : _crossIcon);
+				_playerList.AddItem(player.Name.Equals("") ? "{TEMP_NAME}" : player.Name, player.Ready ? _checkIcon : _crossIcon);
 			}
 		} else if (Managers.GameManager.GameStatus == GameManager.GameStatuses.StartTimer && !_countDownStart)
 		{
