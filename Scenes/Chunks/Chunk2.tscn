@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dbnld332ru7ll"]
+[gd_scene load_steps=6 format=3 uid="uid://dbnld332ru7ll"]
 
 [ext_resource type="TileSet" uid="uid://dikxf4np13di" path="res://Scenes/Chunks/Tiles.tres" id="1_f3j1t"]
 [ext_resource type="PackedScene" uid="uid://cn34d5bbdbfyf" path="res://Scenes/Prefabs/Coin.tscn" id="2_d2l34"]
 [ext_resource type="PackedScene" uid="uid://cc62i58a8qn65" path="res://Scenes/Prefabs/FireFlower.tscn" id="3_pkcwn"]
 [ext_resource type="PackedScene" uid="uid://brqik7cl0nj4e" path="res://Scenes/Prefabs/QuestionBlock.tscn" id="4_8psx3"]
+[ext_resource type="PackedScene" uid="uid://dpwx7ra708sb3" path="res://Scenes/Prefabs/IceFlower.tscn" id="5_p3arc"]
 
 [node name="Chunk2" type="Node2D"]
 
@@ -22,3 +23,6 @@ position = Vector2(539, 473)
 
 [node name="QuestionBlock" parent="." instance=ExtResource("4_8psx3")]
 position = Vector2(364, 366)
+
+[node name="IceFlower" parent="." instance=ExtResource("5_p3arc")]
+position = Vector2(394, 470)
