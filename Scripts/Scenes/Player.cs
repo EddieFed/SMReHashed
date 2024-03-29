@@ -10,6 +10,7 @@ namespace SuperMarioRehashed.Scripts.Scenes;
 public partial class Player : CharacterBody2D
 {
 	// ----- Variables ----- //
+	public string Username = "FUCK";
 	
 	// Preloaded nodes
 	private static readonly PackedScene Fireball = GD.Load<PackedScene>("res://Scenes/Prefabs/Fireball.tscn");
@@ -19,6 +20,7 @@ public partial class Player : CharacterBody2D
 	private Area2D _area2D;
 	private Sprite2D _sprite2D;
 	private ProgressBar _healthBar;
+	private Label _usernameLabel;
 	
 	// Stats/properties
 	private float _speed = 300.0f;
@@ -62,7 +64,7 @@ public partial class Player : CharacterBody2D
 			
 		// GD.Print($"Loaded Chunk #{i}");
 	}
-
+	
 	public override void _Ready()
 	{
 		GetNode<MultiplayerSynchronizer>("MultiplayerSynchronizer").SetMultiplayerAuthority(int.Parse(this.Name));
@@ -78,6 +80,8 @@ public partial class Player : CharacterBody2D
 		_area2D.Monitoring = true;
 		_area2D.BodyEntered += GotHit;
 		_healthBar = GetNode<ProgressBar>("ProgressBar");
+		_usernameLabel = GetNode<Label>("Label");
+		_usernameLabel.Text = Username;
 	}
 
 	// TODO: generalize this to make it work for ANY object hit maybe using a switch statement?

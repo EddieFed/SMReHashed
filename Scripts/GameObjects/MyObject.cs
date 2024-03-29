@@ -16,6 +16,8 @@ public enum ObjectType
 
 public abstract partial class MyObject : Area2D
 {
+	public Vector2 Speed = new Vector2(0, 0);
+	
 	public override void _Ready()
 	{
 		
@@ -23,7 +25,7 @@ public abstract partial class MyObject : Area2D
 		this.BodyEntered += (other) => OnCollide(other);
 	}
 
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	[Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void DestroyObject()
 	{
 		this.QueueFree();
@@ -31,4 +33,9 @@ public abstract partial class MyObject : Area2D
 	
 	abstract public void OnCollide(Node2D other);
 
+	/*public override void _PhysicsProcess(double delta)
+	{
+		Vector2 velocity = this.Velocity;
+		velocity.Y += this.Gravity;
+	}*/
 }

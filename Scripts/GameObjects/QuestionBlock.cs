@@ -8,11 +8,13 @@ public partial class QuestionBlock : MyObject
 	private enum State { Unbumped, Bumped }
 	private State state = State.Unbumped;
 	private Vector2 originalPosition;
+	private int Item = 1;	// HOW TO SYNC???
 
 	public override void _Ready()
 	{
 		base._Ready(); // Call the base class _Ready, if it's defined and necessary
 		originalPosition = Position;
+		Item = Managers.WorldManager.RandomGenerator.Next(0, 3);
 	}
 
 	public override void OnCollide(Node2D other)
@@ -24,7 +26,24 @@ public partial class QuestionBlock : MyObject
 		}
 	}
 
-
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	void SpawnItem()
+	{
+		string resourceName = Item switch
+		{
+			0 => "Coin",
+			1 => "FireFlower",
+			2 => "IceFlower",
+			_ => "Illegal Item!"
+		};
+		GD.Print(resourceName);
+		PackedScene packedScene = GD.Load<PackedScene>($"res://Scenes/Prefabs/{resourceName}.tscn");
+		Node2D item = packedScene.Instantiate<Node2D>();
+		item.GlobalPosition = this.Position + new Vector2(50.0f, 0.0f);
+		
+		this.GetParent().AddChild(item);
+	}
+	
 	private void BumpBlock()
 	{
 		state = State.Bumped;
@@ -33,9 +52,10 @@ public partial class QuestionBlock : MyObject
 
 		BumpUpwards();
 		
-		var timer = GetTree().CreateTimer(0.2f);
+		SceneTreeTimer timer = GetTree().CreateTimer(0.2f);
 		timer.Connect("timeout", new Callable(this, nameof(ReturnToOriginalPosition)));
-
+		
+		Rpc(nameof(SpawnItem));
 	}
 
 	private void BumpUpwards()

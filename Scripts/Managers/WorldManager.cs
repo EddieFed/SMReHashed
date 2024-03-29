@@ -8,7 +8,8 @@ public partial class WorldManager : Node2D
 {
 
 	private static WorldManager _worldManager = null;
-	
+	public static Random RandomGenerator { get; private set; }
+
 	public const int NumChunks = 4;
 	public static int ChunkSize { get; private set; }
 	private static readonly Array<Node2D> Chunks = new Array<Node2D>();
@@ -25,6 +26,9 @@ public partial class WorldManager : Node2D
 	
 	public void GenerateWorld(Random generator)
 	{
+		// Set static copy???
+		RandomGenerator = generator;
+		
 		for (int i = 0; i < NumChunks; i++)
 		{
 			int chunkNum = generator.Next(1, 4);
