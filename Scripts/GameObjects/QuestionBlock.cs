@@ -29,6 +29,11 @@ public partial class QuestionBlock : MyObject
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	void SpawnItem()
 	{
+		if (Multiplayer.IsServer())
+		{
+			SceneTreeTimer timer = GetTree().CreateTimer(5);
+			timer.Connect("timeout", new Callable(this, nameof(ResetBlock)));
+		}
 		string resourceName = Item switch
 		{
 			0 => "Coin",
@@ -46,6 +51,11 @@ public partial class QuestionBlock : MyObject
 	
 	private void BumpBlock()
 	{
+		if (Multiplayer.IsServer())
+		{
+			SceneTreeTimer time = GetTree().CreateTimer(5);
+			time.Connect("timeout", new Callable(this, nameof(ResetBlock)));
+		}
 		state = State.Bumped;
 
 		GetNode<Sprite2D>("Sprite2D").Frame = 1;
@@ -67,6 +77,22 @@ public partial class QuestionBlock : MyObject
 	{
 		Position = originalPosition;
 	}
+
+	void ResetBlock()
+	{
+		Rpc(nameof(ResetBlockRPC));
+		GetNode<Sprite2D>("Sprite2D").Frame = 0;
+		this.state = State.Unbumped;
+	}
+	
+	
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	void ResetBlockRPC()
+	{
+		GetNode<Sprite2D>("Sprite2D").Frame = 0;
+		this.state = State.Unbumped;
+	}
+
 }
 
 

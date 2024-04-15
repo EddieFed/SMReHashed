@@ -122,6 +122,14 @@ public partial class Player : CharacterBody2D
 
 	public void setHealthBar() {
 		_healthBar.Value = _health;
+		if (_health <= 0) HandleDeath();
+		GD.Print($"Health  {_health}");
+
+	}
+
+	private void HandleDeath()
+	{
+		this.QueueFree();
 	}
 
 	public override void _Process(double delta)
