@@ -11,6 +11,8 @@ public partial class Player : CharacterBody2D
 {
 	// ----- Variables ----- //
 	public string Username = "FUCK";
+	public int ID = Int32.MinValue;
+
 	
 	// Preloaded nodes
 	private static readonly PackedScene Fireball = GD.Load<PackedScene>("res://Scenes/Prefabs/Fireball.tscn");
@@ -93,6 +95,8 @@ public partial class Player : CharacterBody2D
 		{
 			return;
 		}
+		
+		if (myProjectile.ProjectileOwner == this.ID) return;
 			
 		if (myProjectile is Fireball)
 		{ 
@@ -247,10 +251,13 @@ public partial class Player : CharacterBody2D
 		switch (effect)
 		{
 			case "FireFlower":
-				ThrowProjectile(Fireball.Instantiate<MyProjectile>());
+				MyProjectile fireball = Fireball.Instantiate<MyProjectile>();
+				fireball.ProjectileOwner = this.ID;
+				ThrowProjectile(fireball);
 				break;
 			case "IceFlower":
 				MyProjectile iceball = Iceball.Instantiate<MyProjectile>();
+				iceball.ProjectileOwner = this.ID;
 				iceball.Modulate = new Color(0, 1, 1);
 				ThrowProjectile(iceball);
 				break;
