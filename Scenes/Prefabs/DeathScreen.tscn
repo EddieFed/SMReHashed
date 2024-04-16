@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cuydn5o73jvfo"]
+
+[ext_resource type="Script" path="res://Scripts/Scenes/DeathScreen.cs" id="1_mtn7d"]
+[ext_resource type="Texture2D" uid="uid://cf7uhyhyhfky3" path="res://Assets/Misc/gameover mask.png" id="2_qix03"]
+
+[node name="DeathScreen" type="Node2D"]
+position = Vector2(573, 320)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_qix03")
+script = ExtResource("1_mtn7d")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, 0.234192)
