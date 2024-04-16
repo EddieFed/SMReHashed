@@ -183,6 +183,12 @@ public partial class Player : CharacterBody2D
 			}
 		}
 		
+		if (this.Position.Y > 900)
+		{
+			this._health = 0;
+			setHealthBar();
+		}
+		
 		RenderChunk(this._currentChunkIndex);
 	}
 	
