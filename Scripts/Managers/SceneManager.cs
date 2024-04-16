@@ -33,6 +33,7 @@ public partial class SceneManager : Node2D
 		{
 			Player currentPlayer = _playerScene.Instantiate<Player>();
 			currentPlayer.Username = playerInfo.Name;
+			currentPlayer.ID = playerInfo.Id;
 			currentPlayer.Name = playerInfo.Id.ToString();
 			this.AddChild(currentPlayer);
 
