@@ -17,6 +17,8 @@ public partial class WorldManager : Node2D
 	
 	public override void _Ready()
 	{
+
+		RandomGenerator = new Random(0);	// Default random for loading
 		
 		// Generate chunk size, that is all
 		Node2D chunk = (Node2D)GD.Load<PackedScene>($"res://Scenes/Chunks/Chunk1.tscn").Instantiate();

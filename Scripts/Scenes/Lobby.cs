@@ -68,7 +68,7 @@ public partial class Lobby : Control
 	private void ConnectedToServer()
 	{
 		GD.Print("CONNECTION SUCCEEDED");
-		RpcId(1, nameof(TransmitPlayerInformation), GetNode<LineEdit>("Username").Text, Multiplayer.GetUniqueId());
+		RpcId(1, nameof(TransmitPlayerInformation), GetNode<LineEdit>("Menu/HBoxContainer/Username").Text, Multiplayer.GetUniqueId(), false);
 	}
 
 	// Runs when player disconnects, runs on ALL peers
@@ -103,7 +103,7 @@ public partial class Lobby : Control
 	{
 		if (message == "You're good Bro")
 		{
-			RpcId(1, nameof(TransmitPlayerInformation), GetNode<LineEdit>("Username").Text, Multiplayer.GetUniqueId(), false);
+			RpcId(1, nameof(TransmitPlayerInformation), GetNode<LineEdit>("Menu/HBoxContainer/Username").Text, Multiplayer.GetUniqueId(), false);
 			Node2D scene = ResourceLoader.Load<PackedScene>("res://Scenes/Levels/LobbyLoading.tscn").Instantiate<Node2D>(); 
 			GetTree().Root.AddChild(scene);
 			this.Hide();
@@ -132,10 +132,16 @@ public partial class Lobby : Control
 		}
 	}
 
+	private void QueueBackgroundFree()
+	{
+		GetNode("Node/TileMap").QueueFree();
+	}
+
 	public void _on_host_button_down()
 	{
 		_hostGame();
-		TransmitPlayerInformation(GetNode<LineEdit>("Username").Text, 1, false);
+		TransmitPlayerInformation(GetNode<LineEdit>("Menu/HBoxContainer/Username").Text, 1, false);
+		QueueBackgroundFree();
 	}
 
 	public void _on_join_button_down()
@@ -145,6 +151,7 @@ public partial class Lobby : Control
 		
 		_peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = _peer;
+		QueueBackgroundFree();
 	}
 
 	public void _on_start_button_down()
@@ -186,7 +193,9 @@ public partial class Lobby : Control
 		{
 			GetTree().Root.RemoveChild(node);
 		}
+
 		this.Hide();
+		this.QueueFree();
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]

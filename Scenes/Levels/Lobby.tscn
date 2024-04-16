@@ -1,56 +1,97 @@
-[gd_scene load_steps=2 format=3 uid="uid://bptamnvcqbcc4"]
+[gd_scene load_steps=5 format=3 uid="uid://bptamnvcqbcc4"]
 
 [ext_resource type="Script" path="res://Scripts/Scenes/Lobby.cs" id="1_ty73o"]
+[ext_resource type="Texture2D" uid="uid://cdjrq5204fsx" path="res://Assets/Misc/Super-Mario-ReHashed-4-15-2024.png" id="2_sbska"]
+[ext_resource type="TileSet" uid="uid://dikxf4np13di" path="res://Scenes/Chunks/Tiles.tres" id="3_hlwlk"]
+[ext_resource type="PackedScene" uid="uid://b7r7lejqc38e1" path="res://Scenes/Prefabs/parallax_background.tscn" id="4_573ti"]
 
 [node name="Lobby" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("1_ty73o")
 
-[node name="Host" type="Button" parent="."]
-layout_mode = 0
-offset_left = 236.0
-offset_top = 102.0
-offset_right = 442.0
-offset_bottom = 138.0
-text = "Host"
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -326.0
+offset_top = -304.0
+offset_right = 336.0
+offset_bottom = 69.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("2_sbska")
+expand_mode = 1
 
-[node name="Join" type="Button" parent="."]
-layout_mode = 0
-offset_left = 462.0
-offset_top = 101.0
-offset_right = 668.0
-offset_bottom = 137.0
-text = "Join"
+[node name="Menu" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -427.32
+offset_top = 127.91
+offset_right = -174.32
+offset_bottom = 263.91
+grow_horizontal = 0
 
-[node name="Start" type="Button" parent="."]
-visible = false
-layout_mode = 0
-offset_left = 542.0
-offset_top = 101.0
-offset_right = 748.0
-offset_bottom = 137.0
-text = "Start"
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu"]
+layout_mode = 2
 
-[node name="Username" type="LineEdit" parent="."]
-layout_mode = 0
-offset_left = 164.0
-offset_top = 50.0
-offset_right = 747.0
-offset_bottom = 81.0
-
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 95.0
-offset_top = 53.0
-offset_right = 152.0
-offset_bottom = 80.0
+[node name="Label" type="Label" parent="Menu/HBoxContainer"]
+layout_mode = 2
 text = "Name:"
 
-[connection signal="button_down" from="Host" to="." method="_on_host_button_down"]
-[connection signal="button_down" from="Join" to="." method="_on_join_button_down"]
-[connection signal="button_down" from="Start" to="." method="_on_start_button_down"]
+[node name="Username" type="LineEdit" parent="Menu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "..."
+max_length = 32
+
+[node name="Join" type="Button" parent="Menu"]
+layout_mode = 2
+text = "Join"
+
+[node name="Host" type="Button" parent="Menu"]
+layout_mode = 2
+text = "Host"
+
+[node name="Quit" type="Button" parent="Menu"]
+layout_mode = 2
+text = "Quit
+"
+
+[node name="Node" type="Node2D" parent="."]
+position = Vector2(-644.47, -316.465)
+scale = Vector2(0.975, 0.975)
+
+[node name="TileMap" type="TileMap" parent="Node"]
+light_mask = 0
+z_index = -10
+z_as_relative = false
+scale = Vector2(3, 3)
+tile_set = ExtResource("3_hlwlk")
+format = 2
+layer_0/modulate = Color(0.85098, 0.85098, 0.85098, 1)
+layer_0/z_index = -10
+layer_0/tile_data = PackedInt32Array(393216, 196609, 4, 393217, 196609, 4, 393218, 196609, 4, 393219, 196609, 4, 393220, 196609, 4, 393221, 196609, 4, 393222, 327681, 5, 458759, 196609, 5, 524297, 196609, 5, 524296, 196609, 4, 524295, 196609, 4, 524294, 131073, 5, 458758, 196609, 4, 458757, 196609, 4, 524293, 131073, 5, 524292, 131073, 5, 458756, 196609, 4, 458755, 196609, 4, 524291, 131073, 5, 524289, 131073, 5, 458754, 196609, 4, 524290, 131073, 5, 458753, 196609, 4, 458752, 196609, 4, 524288, 131073, 5, 589824, 131073, 5, 589825, 131073, 5, 589826, 131073, 5, 589827, 131073, 5, 589828, 131073, 5, 589829, 131073, 5, 589830, 131073, 5, 589831, 131073, 5, 589832, 131073, 5, 655368, 131073, 5, 655367, 131073, 5, 655366, 131073, 5, 655365, 131073, 5, 655364, 131073, 5, 655363, 131073, 5, 655362, 131073, 5, 655361, 131073, 5, 655360, 131073, 5, 589833, 196609, 4, 655369, 131073, 5, 655371, 131073, 5, 589834, 196609, 4, 655370, 131073, 5, 589835, 196609, 4, 589836, 196609, 4, 655372, 131073, 5, 655373, 131073, 5, 589838, 196609, 2, 655374, 131073, 3, 655375, 131073, 3, 589839, 196609, 2, 589840, 131073, 3, 589841, 131073, 3, 589842, 131073, 3, 589843, 131073, 3, 589844, 131073, 3, 589845, 131073, 3, 589846, 131073, 3, 655376, 131073, 3, 655377, 131073, 3, 655378, 131073, 3, 655379, 131073, 3, 655380, 131073, 3, 655381, 131073, 3, 655382, 131073, 3, 720896, 131073, 5, 720897, 131073, 5, 720898, 131073, 5, 720899, 131073, 5, 720900, 131073, 5, 720901, 131073, 5, 720902, 131073, 5, 720903, 131073, 5, 720904, 131073, 5, 720905, 131073, 5, 720906, 131073, 5, 720907, 131073, 5, 720908, 131073, 5, 720909, 131073, 5, 786446, 131073, 5, 786447, 131073, 3, 786448, 131073, 3, 786449, 131073, 3, 720914, 131073, 3, 720915, 131073, 3, 786451, 131073, 3, 786450, 131073, 3, 851985, 131073, 5, 851984, 131073, 5, 720912, 131073, 5, 720913, 131073, 3, 720911, 131073, 3, 720910, 131073, 1, 786445, 131073, 3, 851983, 131073, 5, 851986, 131073, 3, 851987, 131073, 3, 851982, 131073, 5, 851981, 131073, 5, 851980, 131073, 5, 851979, 131073, 5, 851978, 131073, 5, 851977, 131073, 5, 851976, 131073, 5, 851975, 131073, 5, 851974, 131073, 5, 851973, 131073, 5, 851972, 131073, 5, 851971, 131073, 5, 851970, 131073, 5, 851969, 131073, 5, 851968, 131073, 5, 786432, 131073, 5, 786433, 131073, 5, 786434, 131073, 5, 786435, 131073, 5, 786436, 131073, 5, 786437, 131073, 5, 786438, 131073, 5, 786439, 131073, 5, 786440, 131073, 5, 786441, 131073, 5, 786442, 131073, 5, 786443, 131073, 5, 786444, 131073, 5, 720918, 131073, 3, 786454, 131073, 3, 851990, 131073, 3, 917526, 131073, 3, 983062, 131073, 3, 983061, 131073, 3, 983060, 131073, 3, 917524, 131073, 3, 851988, 131073, 3, 786452, 131073, 3, 720916, 131073, 3, 720917, 131073, 3, 786453, 131073, 3, 851989, 131073, 3, 917525, 131073, 3, 983059, 131073, 3, 983058, 131073, 5, 983057, 131073, 3, 983056, 131073, 5, 983055, 131073, 5, 983054, 131073, 3, 983053, 131073, 5, 983052, 131073, 5, 983051, 131073, 5, 983050, 131073, 5, 983049, 131073, 5, 983048, 131073, 5, 983047, 131073, 5, 983046, 131073, 5, 983045, 131073, 5, 983044, 131073, 5, 983043, 131073, 5, 983042, 131073, 5, 983041, 131073, 5, 983040, 131073, 5, 917504, 131073, 5, 917505, 131073, 5, 917506, 131073, 5, 917507, 131073, 5, 917508, 131073, 5, 917509, 131073, 5, 917510, 131073, 5, 917511, 131073, 5, 917512, 131073, 5, 917513, 131073, 5, 917514, 131073, 5, 917515, 131073, 5, 917516, 131073, 5, 917517, 131073, 5, 917518, 131073, 5, 917519, 131073, 3, 917520, 131073, 3, 917521, 131073, 5, 917522, 131073, 3, 917523, 131073, 3, 524287, 131073, 5, 524286, 131073, 5, 524285, 131073, 5, 524284, 131073, 5, 524283, 131073, 5, 589819, 131073, 5, 655355, 131073, 5, 720891, 131073, 5, 720892, 131073, 5, 720893, 131073, 5, 720894, 131073, 5, 720895, 131073, 5, 786431, 131073, 5, 655359, 131073, 5, 589823, 131073, 5, 655358, 131073, 5, 589822, 131073, 5, 655357, 131073, 5, 655356, 131073, 5, 589820, 131073, 5, 589821, 131073, 5, 786427, 131073, 5, 851963, 131073, 5, 917499, 131073, 5, 983035, 131073, 5, 983036, 131073, 5, 1048572, 131073, 5, 1048571, 131073, 5, 1048573, 131073, 5, 1048574, 131073, 5, 1048575, 131073, 5, 983039, 131073, 5, 917503, 131073, 5, 851967, 131073, 5, 983038, 131073, 5, 917502, 131073, 5, 851966, 131073, 5, 786430, 131073, 5, 851965, 131073, 5, 917501, 131073, 5, 983037, 131073, 5, 786429, 131073, 5, 917500, 131073, 5, 851964, 131073, 5, 786428, 131073, 5, 524302, 65537, 3, 589837, 196609, 2, 524303, 196609, 2, 524304, 196609, 2, 524305, 196609, 2, 524306, 196609, 2, 524307, 131073, 3, 524308, 131073, 3, 524309, 131073, 3, 524310, 131073, 3, 458772, 196609, 2, 458773, 196609, 2, 458774, 196609, 2, 458771, 65537, 3)
+
+[node name="ParallaxBackground" parent="Node" instance=ExtResource("4_573ti")]
+offset = Vector2(-400, 0)
+scale = Vector2(1, 1)
+transform = Transform2D(1, 0, 0, 1, -400, 0)
+
+[connection signal="button_down" from="Menu/Join" to="." method="_on_join_button_down"]
+[connection signal="button_down" from="Menu/Host" to="." method="_on_host_button_down"]

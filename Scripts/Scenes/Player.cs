@@ -87,6 +87,7 @@ public partial class Player : CharacterBody2D
 	// TODO: generalize this to make it work for ANY object hit maybe using a switch statement?
 	private void GotHit(Node2D node2D)
 	{
+		
 		// Ignore if not a projectile OR if hit myself
 		if (node2D is not MyProjectile myProjectile)
 		{
