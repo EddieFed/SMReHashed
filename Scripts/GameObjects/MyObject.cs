@@ -25,7 +25,7 @@ public abstract partial class MyObject : Area2D
 		this.BodyEntered += (other) => OnCollide(other);
 	}
 
-	[Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	public void DestroyObject()
 	{
 		this.QueueFree();
