@@ -123,12 +123,32 @@ public partial class Player : CharacterBody2D
 
 	public void setHealthBar() {
 		_healthBar.Value = _health;
-		if (_health <= 0) HandleDeath();
 		GD.Print($"Health  {_health}");
+
+		if (_authority == Multiplayer.GetUniqueId())
+		{
+			if (_health <= 0)
+			{
+				HandleDeath();
+			}
+		}
 
 	}
 
 	private void HandleDeath()
+	{
+		PackedScene dead = GD.Load<PackedScene>("res://Scenes/Prefabs/DeathScreen.tscn");
+		Node2D deadNode = dead.Instantiate<Node2D>();
+		Camera2D camera = deadNode.GetNode<Camera2D>("Camera2D");
+		this.GetTree().Root.AddChild(deadNode);
+		camera.MakeCurrent();
+
+		GD.Print("Died lol");
+		Rpc(nameof(HandleRemoveSelfExistLol));
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void HandleRemoveSelfExistLol()
 	{
 		this.QueueFree();
 	}
