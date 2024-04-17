@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2fbinhsqm1h6"]
+
+[ext_resource type="Texture2D" uid="uid://cdjrq5204fsx" path="res://Assets/Misc/Super-Mario-ReHashed-4-15-2024.png" id="1_u7od7"]
+[ext_resource type="Script" path="res://Scripts/Scenes/DeathScreen.cs" id="2_f7qq6"]
+
+[node name="DeathScreen" type="Node2D"]
+position = Vector2(573, 320)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_u7od7")
+script = ExtResource("2_f7qq6")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, 0.234192)
