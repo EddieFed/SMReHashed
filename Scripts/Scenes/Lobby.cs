@@ -68,7 +68,6 @@ public partial class Lobby : Control
 	private void ConnectedToServer()
 	{
 		GD.Print("CONNECTION SUCCEEDED");
-		RpcId(1, nameof(TransmitPlayerInformation), GetNode<LineEdit>("Menu/HBoxContainer/Username").Text, Multiplayer.GetUniqueId(), false);
 	}
 
 	// Runs when player disconnects, runs on ALL peers
