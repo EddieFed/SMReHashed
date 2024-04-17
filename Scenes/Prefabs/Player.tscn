@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://duvvju8cvuhx3"]
 
 [ext_resource type="Script" path="res://Scripts/Scenes/Player.cs" id="1_it1xr"]
-[ext_resource type="Texture2D" uid="uid://m36vy8r0xvbg" path="res://Assets/Peach/custom-peach.png" id="2_ep14m"]
+[ext_resource type="Texture2D" uid="uid://ypq14r3d6v2f" path="res://Assets/Peach/custom-peach-export.png" id="2_krqp6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2vm75"]
 size = Vector2(47, 86)
@@ -20,8 +20,11 @@ script = ExtResource("1_it1xr")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
+position = Vector2(-23, -42)
 scale = Vector2(0.19, 0.19)
-texture = ExtResource("2_ep14m")
+texture = ExtResource("2_krqp6")
+centered = false
+hframes = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 0)

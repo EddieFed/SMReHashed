@@ -309,6 +309,18 @@ public partial class Player : CharacterBody2D
 	public void GivePowerup(ObjectType objectType)
 	{
 		this._powerup = objectType;
+		switch (_powerup.ToString())
+		{
+			case "FireFlower":
+				GetNode<Sprite2D>("Sprite2D").Frame = 2;
+				break;
+			case "IceFlower":
+				GetNode<Sprite2D>("Sprite2D").Frame = 1;
+				break;
+			case "Boomerang":
+				// ThrowProjectile(Fireball.Instantiate<MyProjectile>());
+				break;
+		}
 	}
 
 	public void RemovePowerUp(ObjectType objectType)
@@ -316,6 +328,7 @@ public partial class Player : CharacterBody2D
 		if (this._powerup == objectType)
 		{
 			this._powerup = ObjectType.None;
+			GetNode<Sprite2D>("Sprite2D").Frame = 0;
 		}
 	}
 	
