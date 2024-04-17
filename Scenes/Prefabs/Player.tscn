@@ -1,10 +1,10 @@
 [gd_scene load_steps=5 format=3 uid="uid://duvvju8cvuhx3"]
 
 [ext_resource type="Script" path="res://Scripts/Scenes/Player.cs" id="1_it1xr"]
-[ext_resource type="Texture2D" uid="uid://drquoajtbauux" path="res://Assets/Peach/PrincessPeach.png" id="2_iakry"]
+[ext_resource type="Texture2D" uid="uid://m36vy8r0xvbg" path="res://Assets/Peach/custom-peach.png" id="2_ep14m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2vm75"]
-size = Vector2(69.5, 91.9318)
+size = Vector2(47, 86)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2iaya"]
 properties/0/path = NodePath(".:_syncPos")
@@ -20,10 +20,11 @@ script = ExtResource("1_it1xr")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-scale = Vector2(0.226829, 0.190196)
-texture = ExtResource("2_iakry")
+scale = Vector2(0.19, 0.19)
+texture = ExtResource("2_ep14m")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_2vm75")
 debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
@@ -37,6 +38,7 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-2, 0)
 shape = SubResource("RectangleShape2D_2vm75")
 debug_color = Color(0, 0.6, 0.701961, 0.419608)
 

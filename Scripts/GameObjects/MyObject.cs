@@ -5,13 +5,13 @@ namespace SuperMarioRehashed.Scripts.GameObjects;
 
 public enum ObjectType
 {
-    None,
-    Coin,
-    Mushroom,
-    FireFlower,
-    IceFlower,
-    Boomerang,
-    QuestionBlock
+	None,
+	Coin,
+	Mushroom,
+	FireFlower,
+	IceFlower,
+	Boomerang,
+	QuestionBlock
 } 
 
 public abstract partial class MyObject : Area2D
