@@ -176,6 +176,7 @@ public partial class Lobby : Control
 			GD.Print($"Server is no longer taking orders");
 		}
 		Managers.GameManager.GameStatus = GameManager.GameStatuses.InGame;
+		Managers.GameManager.LocalId = Multiplayer.GetUniqueId();
 		foreach (PlayerInfo playerInfo in Managers.GameManager.Players)
 		{
 			GD.Print($"{playerInfo.Name} is Playing");
@@ -206,6 +207,7 @@ public partial class Lobby : Control
 			Name = name,
 			Id = id,
 			Ready = ready,
+			IsDead = false,
 		};
 
 		if (!Managers.GameManager.Players.Contains(playerInfo))

@@ -154,7 +154,20 @@ public partial class Player : CharacterBody2D
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void HandleRemoveSelfExistLol()
 	{
+		int potentialWinner = Managers.GameManager.PlayerDeath(ID);
+		if (potentialWinner == Multiplayer.GetUniqueId()) Win(); 
 		this.QueueFree();
+	}
+	
+	private void Win()
+	{
+		PackedScene dead = GD.Load<PackedScene>("res://Scenes/Prefabs/WinScreen.tscn");
+		Node2D deadNode = dead.Instantiate<Node2D>();
+		Camera2D camera = deadNode.GetNode<Camera2D>("Camera2D");
+		this.GetTree().Root.AddChild(deadNode);
+		camera.MakeCurrent();
+		//this.QueueFree();
+		GD.Print("Win lol");
 	}
 
 	public override void _Process(double delta)
