@@ -32,6 +32,8 @@ public partial class Player : CharacterBody2D
 	private bool _frozen = false;
 	private ObjectType _powerup = ObjectType.None;
 	private readonly ArrayList _items = new();
+	private float frameChangeTimer = 0f;
+	private float frameChangeInterval = 0.2f; // Adjust this value to control the frame change speed
 	
 	// World management
 	private int _currentChunkIndex = 0;
@@ -209,42 +211,123 @@ public partial class Player : CharacterBody2D
 		RenderChunk(this._currentChunkIndex);
 	}
 	
-	public override void _PhysicsProcess(double delta)
+
+public override void _PhysicsProcess(double delta)
+{
+	if (_authority == Multiplayer.GetUniqueId())
 	{
-		if (_authority == Multiplayer.GetUniqueId())
+		Vector2 velocity = Velocity;
+
+		// Add the gravity.
+		velocity.Y += _gravity * (float)delta;
+
+		// Handle jump.
+		if (Input.IsActionJustPressed("action_jump") && IsOnFloor())
 		{
-			Vector2 velocity = Velocity;
+			velocity.Y = _jumpSpeed;
+		}
 
-			// Add the gravity.
-			velocity.Y += _gravity * (float)delta;
+		// Get the input direction.
+		_direction = (int) Input.GetAxis("move_left", "move_right");
+		velocity.X = _direction * _speed;
+		this.Velocity = velocity;
 
-			// Handle jump.
-			if (Input.IsActionJustPressed("action_jump") && IsOnFloor())
+		MoveAndSlide();
+		_syncPos = GlobalPosition;
+
+		// Handle movement frames with a timer
+		frameChangeTimer += (float)delta;
+		if (frameChangeTimer >= frameChangeInterval)
+		{
+			Sprite2D sprite = GetNode<Sprite2D>("Sprite2D");
+			int frameOffset = GetFrameOffset(); // Get the frame offset based on the power-up
+
+			if (!IsOnFloor()) // If the character is in the air (jumping)
 			{
-				velocity.Y = _jumpSpeed;
+				// Use jumping frames. 
+				int jumpFrameStart = frameOffset + 3; // Jump frames start immediately after the 3 movement frames
+				if (sprite.Frame < jumpFrameStart || sprite.Frame >= jumpFrameStart + 2) {
+					sprite.Frame = jumpFrameStart;
+				} else {
+					sprite.Frame = jumpFrameStart + ((sprite.Frame - jumpFrameStart + 1) % 2);
+				}
 			}
-
-			// Get the input direction.
-			_direction = (int) Input.GetAxis("move_left", "move_right");
-			velocity.X = _direction * _speed;
-			this.Velocity = velocity;
-
-			MoveAndSlide();
-			_syncPos = GlobalPosition;
+			else if (_direction != 0) // If there's horizontal movement
+			{
+				// Ensure we are cycling within the correct range of frames for walking
+				if (sprite.Frame < frameOffset || sprite.Frame >= frameOffset + 3) {
+					sprite.Frame = frameOffset;
+				} else {
+					sprite.Frame = frameOffset + ((sprite.Frame - frameOffset + 1) % 3);
+				}
+			}
+			else // No movement
+			{
+				// Reset to the first frame of the movement frames when not moving
+				sprite.Frame = frameOffset;
+			}
+			frameChangeTimer = 0f; // Reset the timer
 		}
-		else
-		{
-			// Commenting this out cases lag
-			GlobalPosition = GlobalPosition.Lerp(_syncPos, 0.9f);
-			// GlobalPosition = _syncPos;
-		}
-		
 		if (_direction != 0)
-		{
+			{
 			_sprite2D.FlipH = !(_direction > 0); // Flip if NOT moving right
-		}
-		
+			}
 	}
+	else
+	{
+		// Commenting this out causes lag
+		GlobalPosition = GlobalPosition.Lerp(_syncPos, 0.9f);
+	}
+}
+
+private int GetFrameOffset()
+{
+	switch (_powerup.ToString())
+	{
+		case "FireFlower":
+			return 6;  // Frame offset for FireFlower
+		case "IceFlower":
+			return 12; // Frame offset for IceFlower
+		default:
+			return 0;  // Default offset for normal sprite
+	}
+}
+	//public override void _PhysicsProcess(double delta)
+	//{
+		//if (_authority == Multiplayer.GetUniqueId())
+		//{
+			//Vector2 velocity = Velocity;
+//
+			//// Add the gravity.
+			//velocity.Y += _gravity * (float)delta;
+//
+			//// Handle jump.
+			//if (Input.IsActionJustPressed("action_jump") && IsOnFloor())
+			//{
+				//velocity.Y = _jumpSpeed;
+			//}
+//
+			//// Get the input direction.
+			//_direction = (int) Input.GetAxis("move_left", "move_right");
+			//velocity.X = _direction * _speed;
+			//this.Velocity = velocity;
+//
+			//MoveAndSlide();
+			//_syncPos = GlobalPosition;
+		//}
+		//else
+		//{
+			//// Commenting this out cases lag
+			//GlobalPosition = GlobalPosition.Lerp(_syncPos, 0.9f);
+			//// GlobalPosition = _syncPos;
+		//}
+		//
+		//if (_direction != 0)
+		//{
+			//_sprite2D.FlipH = !(_direction > 0); // Flip if NOT moving right
+		//}
+		//
+	//}
 	
 	private void ThrowProjectile(MyProjectile myProjectile)
 	{
@@ -281,41 +364,83 @@ public partial class Player : CharacterBody2D
 	}
 	
 	//Handles Keybindings
+	
 	public override void _Input(InputEvent @event)
 	{
-		// Only allow key presses for local player!
-		if (_authority != Multiplayer.GetUniqueId()) return;
-		
-		// Do we need this? Should items be picked up by default or manually?
-		/*//Pickup Item (e)
-		if (@event.IsActionPressed("action_grab"))
+	// Only allow key presses for local player!
+	if (_authority != Multiplayer.GetUniqueId()) return;
+	
+	// Attack (j)
+	if (@event.IsActionPressed("action_attack"))
+	{
+		Sprite2D sprite = GetNode<Sprite2D>("Sprite2D"); 
+		switch (_powerup.ToString())
 		{
-			this.AddItem(ObjectType.Mushroom);
-		}*/
-		
-		// Attack (j)
-		if (@event.IsActionPressed("action_attack"))
-		{
-			Rpc(nameof(Attack), Enum.GetName(typeof(ObjectType), _powerup));
+			case "FireFlower":
+				sprite.Frame = 11;  // Fire attack frame
+				break;
+			case "IceFlower":
+				sprite.Frame = 17;  // Ice attack frame
+				break;
+			default:
+				// Optionally handle a default attack frame if necessary
+				break;
 		}
 
-		// Print Inventory (p)
-		if (@event.IsActionPressed("display_inventory"))
-		{
-			this.DisplayInventory();
-		}
+		Rpc(nameof(Attack), Enum.GetName(typeof(ObjectType), _powerup));
 	}
 
+	// Print Inventory (p)
+	if (@event.IsActionPressed("display_inventory"))
+	{
+		this.DisplayInventory();
+	}
+
+	/* Uncomment if item pickup needs to be manual
+	//Pickup Item (e)
+	if (@event.IsActionPressed("action_grab"))
+	{
+		this.AddItem(ObjectType.Mushroom);
+	}*/
+}
+
+	
+	//public override void _Input(InputEvent @event)
+	//{
+		//// Only allow key presses for local player!
+		//if (_authority != Multiplayer.GetUniqueId()) return;
+		//
+		//// Do we need this? Should items be picked up by default or manually?
+		///*//Pickup Item (e)
+		//if (@event.IsActionPressed("action_grab"))
+		//{
+			//this.AddItem(ObjectType.Mushroom);
+		//}*/
+		//
+		//// Attack (j)
+		//if (@event.IsActionPressed("action_attack"))
+		//{
+			//Rpc(nameof(Attack), Enum.GetName(typeof(ObjectType), _powerup));
+		//}
+//
+		//// Print Inventory (p)
+		//if (@event.IsActionPressed("display_inventory"))
+		//{
+			//this.DisplayInventory();
+		//}
+	//}
+	
+	
 	public void GivePowerup(ObjectType objectType)
 	{
 		this._powerup = objectType;
 		switch (_powerup.ToString())
 		{
 			case "FireFlower":
-				GetNode<Sprite2D>("Sprite2D").Frame = 2;
+				GetNode<Sprite2D>("Sprite2D").Frame = 6;
 				break;
 			case "IceFlower":
-				GetNode<Sprite2D>("Sprite2D").Frame = 1;
+				GetNode<Sprite2D>("Sprite2D").Frame = 12;
 				break;
 			case "Boomerang":
 				// ThrowProjectile(Fireball.Instantiate<MyProjectile>());
